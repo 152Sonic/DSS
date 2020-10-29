@@ -19,30 +19,34 @@ P\'f3s-Condi\'e7\'e3o: O sistema fica com mais um registo de mat\'e9ria prima na
 	2. Sistema verifica se n\'e3o h\'e1 paletas em espera\
 	3. Cami\'e3o efetua descarga\
 	4. Funcion\'e1rio efetua registo\
+	5. Funcion\'e1rio aumenta stock de mat\'e9ria prima\
 	5. Sistema verifica disponibilidade do robot\
 	6. Sistema envia informa\'e7\'e3o da paleta\
 	7. Sistema envia informa\'e7\'e3o da prateleira dispon\'edvel\
 	8. Sistema envia informa\'e7\'e3o de percurso\
 	9. Robot finaliza armazenamento\
 \
-(Pode haver mais)\
- \
-\ul Fluxo alternativo 1:\ulnone  (passo 2)\
-\
-	3.1. Sistema verifica indisponibilidade  \
-	3.2. Sistema decide n\'e3o aceitar descarga\
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
-\cf0 \ul \ulc0 Fluxo alternativo 2:\ulnone  (passo 3)\
+\cf0 \ul \ulc0 Fluxo alternativo 1:\ulnone  (passo 5)\
+\
+	4.1. Sistema verifica indisponibilidade do robot\
+	4.2. Sistema deixa paleta em espera\
+	4.3. Regressa 6.\
+ \
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \ul \ulc0 Exce\'e7\'e3o 1:\ulnone  (passo 2)\
+\
+	2.1. Sistema verifica indisponibilidade  \
+	2.2. Sistema decide n\'e3o aceitar descarga\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+\cf0 \ul \ulc0 Exce\'e7\'e3o 2:\ulnone  (passo 3)\
 \
 	3.1. Sistema verifica que existe paletas em espera \
 	3.2. Sistema decide n\'e3o aceitar descarga\
 \
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
-\cf0 \ul \ulc0 Fluxo alternativo 3:\ulnone  (passo 4)\
 \
-	4.1. Sistema verifica indisponibilidade do robot\
-	4.2. Sistema deixa paleta em espera\
 \
 \
 \
