@@ -1,3 +1,4 @@
+import java.util.Map;
 import java.util.Objects;
 
 public class Sistema {
@@ -85,5 +86,9 @@ public class Sistema {
 
     public Sistema clone(){
         return new Sistema(this);
+    }
+
+    public Map<String, Localização> consulta(){
+        return paletes.consulta();
     }
 }

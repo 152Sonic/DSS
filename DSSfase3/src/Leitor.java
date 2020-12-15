@@ -2,17 +2,22 @@ import java.util.Objects;
 
 public class Leitor {
     private String qrcode;
+    private QRcode info;
+
 
     public Leitor(){
         qrcode = new String();
+        info = new QRcode();
     }
 
     public Leitor(String qrcode) {
         this.qrcode = qrcode;
+        this.info = info;
     }
 
     public Leitor(Leitor lei){
         qrcode = lei.getQrcode();
+        info = lei.getInfo();
     }
 
     public String getQrcode() {
@@ -23,6 +28,13 @@ public class Leitor {
         this.qrcode = qrcode;
     }
 
+    public QRcode getInfo() {
+        return info;
+    }
+
+    public void setInfo(QRcode info) {
+        this.info = info;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
