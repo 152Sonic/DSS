@@ -1,29 +1,31 @@
+package business;
+
 import java.util.Objects;
 
 public class Palete {
     private String codPalete;
-    private Localização localização;
-    private boolean espera;
+    private Localizacao localizacao;
+    private boolean transporte;
     private String materiaP;
 
-    public Palete(String codPalete, Localização localização, boolean espera, String materiaP) {
+    public Palete(String codPalete, Localizacao localizacao, boolean espera, String materiaP) {
         this.codPalete = codPalete;
-        this.localização = localização;
-        this.espera = espera;
+        this.localizacao = localizacao;
+        this.transporte = espera;
         this.materiaP = materiaP;
     }
 
     public Palete(){
         codPalete = new String();
-        localização = new Localização();
-        espera = false;
+        localizacao = new Localizacao();
+        transporte = false;
         materiaP = new String();
     }
 
     public Palete(Palete pal){
         codPalete = pal.getCodPalete();
-        localização = pal.getLocalização();
-        espera = pal.isEspera();
+        localizacao = pal.getLocalizacao();
+        transporte = pal.isEspera();
         materiaP = pal.getMateriaP();
     }
 
@@ -35,20 +37,20 @@ public class Palete {
         this.codPalete = codPalete;
     }
 
-    public Localização getLocalização() {
-        return localização;
+    public Localizacao getLocalizacao() {
+        return localizacao;
     }
 
-    public void setLocalização(Localização localização) {
-        this.localização = localização;
+    public void setLocalizacao(Localizacao localizacao) {
+        this.localizacao = localizacao;
     }
 
     public boolean isEspera() {
-        return espera;
+        return transporte;
     }
 
     public void setEspera(boolean espera) {
-        this.espera = espera;
+        this.transporte = espera;
     }
 
     public String getMateriaP() {
@@ -64,15 +66,15 @@ public class Palete {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Palete palete = (Palete) o;
-        return espera == palete.espera &&
+        return transporte == palete.transporte &&
                 Objects.equals(codPalete, palete.codPalete) &&
-                Objects.equals(localização, palete.localização) &&
+                Objects.equals(localizacao, palete.localizacao) &&
                 Objects.equals(materiaP, palete.materiaP);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(codPalete, localização, espera, materiaP);
+        return Objects.hash(codPalete, localizacao, transporte, materiaP);
     }
 
     public Palete clone(){

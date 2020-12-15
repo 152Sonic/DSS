@@ -1,3 +1,5 @@
+package business;
+
 import java.util.Map;
 import java.util.Objects;
 
@@ -88,7 +90,7 @@ public class Sistema {
         return new Sistema(this);
     }
 
-    public Map<String, Localização> consulta(){
+    public Map<String, Localizacao> consulta(){
         return paletes.consulta();
     }
 }

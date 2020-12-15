@@ -1,3 +1,4 @@
+package business;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,25 +7,25 @@ import java.util.Objects;
 public class Robot {
     private String codRobot;
     private List<String> listaEspera;
-    private Localização localização;
+    private Localizacao localizacao;
 
 
-    public Robot(String codRobot, List<String> listaEspera, Localização localização) {
+    public Robot(String codRobot, List<String> listaEspera, Localizacao localizacao) {
         this.codRobot = codRobot;
         setListaEspera(listaEspera);
-        this.localização = localização;
+        this.localizacao = localizacao;
     }
 
     public Robot(){
         codRobot = new String();
         listaEspera = new ArrayList<>();
-        localização = new Localização();
+        localizacao = new Localizacao();
     }
 
     public Robot(Robot ro){
         codRobot = ro.getCodRobot();
         setListaEspera(ro.getListaEspera());
-        localização = ro.getLocalização();
+        localizacao = ro.getLocalizacao();
 
     }
 
@@ -51,12 +52,12 @@ public class Robot {
         }
     }
 
-    public Localização getLocalização() {
-        return localização;
+    public Localizacao getLocalizacao() {
+        return localizacao;
     }
 
-    public void setLocalização(Localização localização) {
-        this.localização = localização;
+    public void setLocalizacao(Localizacao localizacao) {
+        this.localizacao = localizacao;
     }
 
     @Override
@@ -66,12 +67,12 @@ public class Robot {
         Robot robot = (Robot) o;
         return Objects.equals(codRobot, robot.codRobot) &&
                 Objects.equals(listaEspera, robot.listaEspera) &&
-                Objects.equals(localização, robot.localização);
+                Objects.equals(localizacao, robot.localizacao);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(codRobot, listaEspera, localização);
+        return Objects.hash(codRobot, listaEspera, localizacao);
     }
 
     public Robot clone(){

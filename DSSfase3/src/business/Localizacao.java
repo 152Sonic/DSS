@@ -1,20 +1,22 @@
+package business;
+
 import java.util.Objects;
 
-public class Localização {
+public class Localizacao {
     private int x;
     private int y;
 
-    public Localização(){
+    public Localizacao(){
         x = 0;
         y = 0;
     }
 
-    public Localização(int x, int y) {
+    public Localizacao(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public Localização(Localização local){
+    public Localizacao(Localizacao local){
         x = local.getX();
         y = local.getY();
     }
@@ -39,7 +41,7 @@ public class Localização {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Localização that = (Localização) o;
+        Localizacao that = (Localizacao) o;
         return x == that.x &&
                 y == that.y;
     }
@@ -49,7 +51,7 @@ public class Localização {
         return Objects.hash(x, y);
     }
 
-    public Localização clone(){
-        return new Localização(this);
+    public Localizacao clone(){
+        return new Localizacao(this);
     }
 }

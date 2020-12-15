@@ -1,9 +1,11 @@
+package business;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class Robots {
-    private Map<String,Robot> robots;
+    private Map<String, Robot> robots;
 
     public Robots(Map<String, Robot> robots) {
         setRobots(robots);

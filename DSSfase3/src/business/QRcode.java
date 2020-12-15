@@ -1,3 +1,5 @@
+package business;
+
 public class QRcode {
     private String materiaP;
     private int qtdPaletes;

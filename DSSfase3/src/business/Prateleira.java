@@ -1,12 +1,14 @@
+package business;
+
 import java.util.Objects;
 
 public class Prateleira {
     private boolean disponibilidade;
     private String codPrateleira;
-    private Localização local;
+    private Localizacao local;
 
 
-    public Prateleira(boolean disponibilidade, String codPrateleira, Localização local) {
+    public Prateleira(boolean disponibilidade, String codPrateleira, Localizacao local) {
         this.disponibilidade = disponibilidade;
         this.codPrateleira = codPrateleira;
         this.local = local;
@@ -15,7 +17,7 @@ public class Prateleira {
     public Prateleira(){
         disponibilidade = false;
         codPrateleira = new String();
-        local = new Localização();
+        local = new Localizacao();
     }
 
     public Prateleira(Prateleira prat){
@@ -24,11 +26,11 @@ public class Prateleira {
         local = prat.getLocal();
     }
 
-    public Localização getLocal() {
+    public Localizacao getLocal() {
         return local;
     }
 
-    public void setLocal(Localização local) {
+    public void setLocal(Localizacao local) {
         this.local = local;
     }
 

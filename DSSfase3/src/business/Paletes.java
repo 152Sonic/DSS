@@ -1,3 +1,5 @@
+package business;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -54,10 +56,10 @@ public class Paletes {
         return new Paletes(this);
     }
 
-    public Map<String,Localização> consulta(){
-        Map<String,Localização> consultas = new HashMap<>();
+    public Map<String, Localizacao> consulta(){
+        Map<String, Localizacao> consultas = new HashMap<>();
         for(Map.Entry<String,Palete> p: this.paletes.entrySet()){
-            consultas.put(p.getKey(), p.getValue().getLocalização());
+            consultas.put(p.getKey(), p.getValue().getLocalizacao());
         }
         return consultas;
     }
