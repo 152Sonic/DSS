@@ -25,7 +25,7 @@ public class Palete {
     public Palete(Palete pal){
         codPalete = pal.getCodPalete();
         localizacao = pal.getLocalizacao();
-        transporte = pal.isEspera();
+        transporte = pal.isTransporte();
         materiaP = pal.getMateriaP();
     }
 
@@ -45,13 +45,15 @@ public class Palete {
         this.localizacao = localizacao;
     }
 
-    public boolean isEspera() {
+    public boolean isTransporte() {
         return transporte;
     }
 
-    public void setEspera(boolean espera) {
+    public void setTransporte(boolean espera) {
         this.transporte = espera;
     }
+
+
 
     public String getMateriaP() {
         return materiaP;
