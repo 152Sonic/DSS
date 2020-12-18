@@ -5,27 +5,27 @@ import java.util.Objects;
 public class Palete {
     private String codPalete;
     private Localizacao localizacao;
-    private boolean transporte;
+    private String robot;
     private String materiaP;
 
-    public Palete(String codPalete, Localizacao localizacao, boolean espera, String materiaP) {
+    public Palete(String codPalete, Localizacao localizacao, String robot, String materiaP) {
         this.codPalete = codPalete;
         this.localizacao = localizacao;
-        this.transporte = espera;
+        this.robot = robot;
         this.materiaP = materiaP;
     }
 
     public Palete(){
         codPalete = new String();
         localizacao = new Localizacao();
-        transporte = false;
+        robot = new String();
         materiaP = new String();
     }
 
     public Palete(Palete pal){
         codPalete = pal.getCodPalete();
         localizacao = pal.getLocalizacao();
-        transporte = pal.isTransporte();
+        robot = pal.isTransporte();
         materiaP = pal.getMateriaP();
     }
 
@@ -45,12 +45,12 @@ public class Palete {
         this.localizacao = localizacao;
     }
 
-    public boolean isTransporte() {
-        return transporte;
+    public String isTransporte() {
+        return robot;
     }
 
-    public void setTransporte(boolean espera) {
-        this.transporte = espera;
+    public void setTransporte(String robot) {
+        this.robot = robot;
     }
 
 
@@ -68,7 +68,7 @@ public class Palete {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Palete palete = (Palete) o;
-        return transporte == palete.transporte &&
+        return robot == palete.robot &&
                 Objects.equals(codPalete, palete.codPalete) &&
                 Objects.equals(localizacao, palete.localizacao) &&
                 Objects.equals(materiaP, palete.materiaP);
@@ -76,7 +76,7 @@ public class Palete {
 
     @Override
     public int hashCode() {
-        return Objects.hash(codPalete, localizacao, transporte, materiaP);
+        return Objects.hash(codPalete, localizacao, robot, materiaP);
     }
 
     public Palete clone(){

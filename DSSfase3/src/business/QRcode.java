@@ -1,22 +1,23 @@
 package business;
 
 public class QRcode {
+    private String cod;
     private String materiaP;
-    private int qtdPaletes;
+
 
     public QRcode(){
         materiaP = new String();
-        qtdPaletes = 0;
+        cod = new String();
     }
 
-    public QRcode(String materiaP, int qtdPaletes) {
+    public QRcode(String materiaP, String cod) {
         this.materiaP = materiaP;
-        this.qtdPaletes = qtdPaletes;
+        this.cod = cod;
     }
 
     public QRcode(QRcode lei){
         materiaP = lei.getMateriaP();
-        qtdPaletes = lei.getQtdPaletes();
+        cod = lei.getCod();
     }
 
     public String getMateriaP() {
@@ -27,11 +28,11 @@ public class QRcode {
         this.materiaP = materiaP;
     }
 
-    public int getQtdPaletes() {
-        return qtdPaletes;
+    public String getCod() {
+        return cod;
     }
 
-    public void setQtdPaletes(int qtdPaletes) {
-        this.qtdPaletes = qtdPaletes;
+    public void setCod(String cod) {
+        this.cod = cod;
     }
 }
