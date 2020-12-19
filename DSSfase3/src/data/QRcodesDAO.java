@@ -1,4 +1,4 @@
-package data;
+/*package data;
 
 import business.QRcode;
 
@@ -134,5 +134,5 @@ public class QRcodesDAO implements Map<String, QRcode> {
             throw new NullPointerException(e.getMessage());
         }
     }
-}
+}*/
 

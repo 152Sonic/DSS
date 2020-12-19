@@ -1,55 +1,72 @@
 package business;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
+import java.lang.Object;
+
+
+
 
 public class Robot {
-    private String codRobot;
-    private List<String> listaEspera;
+    private int codRobot;
     private Localizacao localizacao;
+    private Palete aTranpos;
+    private Localizacao localizacaoFinal;
+    private int entregue;
 
 
-    public Robot(String codRobot, List<String> listaEspera, Localizacao localizacao) {
+    public Robot(int codRobot, Localizacao localizacao,Palete aTranspos,Localizacao lf,int entregue) {
         this.codRobot = codRobot;
-        setListaEspera(listaEspera);
         this.localizacao = localizacao;
+        this.aTranpos = aTranspos;
+        this.localizacaoFinal = lf;
+        this.entregue = entregue;
     }
 
     public Robot(){
-        codRobot = new String();
-        listaEspera = new ArrayList<>();
+        codRobot = -1;
         localizacao = new Localizacao();
+        aTranpos = new Palete();
+        localizacaoFinal = new Localizacao();
+        entregue = 0;
     }
 
     public Robot(Robot ro){
         codRobot = ro.getCodRobot();
-        setListaEspera(ro.getListaEspera());
         localizacao = ro.getLocalizacao();
-
+        aTranpos  = ro.getaTranpos();
+        localizacaoFinal = ro.getLocalizacaoFinal();
+        entregue =  ro.getEntregue();
     }
 
-    public String getCodRobot() {
+    public int getEntregue() {
+        return entregue;
+    }
+
+    public void setEntregue(int entregue) {
+        this.entregue = entregue;
+    }
+
+    public Localizacao getLocalizacaoFinal() {
+        return localizacaoFinal;
+    }
+
+    public void setLocalizacaoFinal(Localizacao localizacaoFinal) {
+        this.localizacaoFinal = localizacaoFinal;
+    }
+
+    public Palete getaTranpos() {
+        return aTranpos;
+    }
+
+    public void setaTranpos(Palete aTranpos) {
+        this.aTranpos = aTranpos;
+    }
+
+    public int getCodRobot() {
         return codRobot;
     }
 
-    public void setCodRobot(String codRobot) {
+    public void setCodRobot(int codRobot) {
         this.codRobot = codRobot;
-    }
-
-    public List<String> getListaEspera() {
-        List<String> aux = new ArrayList<>();
-        for(String n: listaEspera){
-            aux.add(n);
-        }
-        return aux;
-    }
-
-    public void setListaEspera(List<String> listaEspera) {
-        this.listaEspera = new ArrayList<>();
-        for(String n: listaEspera){
-            this.listaEspera.add(n);
-        }
     }
 
     public Localizacao getLocalizacao() {
@@ -63,19 +80,32 @@ public class Robot {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Robot)) return false;
         Robot robot = (Robot) o;
-        return Objects.equals(codRobot, robot.codRobot) &&
-                Objects.equals(listaEspera, robot.listaEspera) &&
-                Objects.equals(localizacao, robot.localizacao);
+        return getCodRobot() == robot.getCodRobot() &&
+                getEntregue() == robot.getEntregue() &&
+                Objects.equals(getLocalizacao(), robot.getLocalizacao()) &&
+                Objects.equals(getaTranpos(), robot.getaTranpos()) &&
+                Objects.equals(getLocalizacaoFinal(), robot.getLocalizacaoFinal());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(codRobot, listaEspera, localizacao);
+        return Objects.hash(getCodRobot(), getLocalizacao(), getaTranpos(), getLocalizacaoFinal(), getEntregue());
     }
 
     public Robot clone(){
         return new Robot(this);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Robot{");
+        sb.append("codRobot=").append(codRobot);
+        sb.append(", localizacao=").append(localizacao);
+        sb.append(", aTranpos=").append(aTranpos);
+        sb.append(", localizacaoFinal=").append(localizacaoFinal);
+        sb.append('}');
+        return sb.toString();
     }
 }

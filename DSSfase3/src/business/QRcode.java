@@ -1,16 +1,16 @@
 package business;
 
 public class QRcode {
-    private String cod;
+    private int cod;
     private String materiaP;
 
 
     public QRcode(){
         materiaP = new String();
-        cod = new String();
+        cod = -1;
     }
 
-    public QRcode(String materiaP, String cod) {
+    public QRcode(String materiaP, int cod) {
         this.materiaP = materiaP;
         this.cod = cod;
     }
@@ -28,11 +28,11 @@ public class QRcode {
         this.materiaP = materiaP;
     }
 
-    public String getCod() {
+    public int getCod() {
         return cod;
     }
 
-    public void setCod(String cod) {
+    public void setCod(int cod) {
         this.cod = cod;
     }
 }

@@ -7,8 +7,8 @@ public class Localizacao {
     private int y;
 
     public Localizacao(){
-        x = 0;
-        y = 0;
+        x = -1;
+        y = -1;
     }
 
     public Localizacao(int x, int y) {
@@ -54,4 +54,22 @@ public class Localizacao {
     public Localizacao clone(){
         return new Localizacao(this);
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Localizacao{");
+        sb.append("x=").append(x);
+        sb.append(", y=").append(y);
+        sb.append('}');
+        return sb.toString();
+    }
+
+    public boolean isEntrada(){
+        return x == 0 && y == 0;
+    }
+
+    public boolean isSaida(){
+        return x == 1 && y == 1;
+    }
+
 }

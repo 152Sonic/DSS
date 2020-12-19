@@ -1,3 +1,4 @@
+import business.SistemaFacade;
 import ui.TextUI;
 
 public class Main {
@@ -9,5 +10,8 @@ public class Main {
         catch (Exception e) {
             System.out.println("Não foi possível arrancar: "+e.getMessage());
         }
+
+
     }
 }
+

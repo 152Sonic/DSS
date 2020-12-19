@@ -2,18 +2,18 @@ package business;
 
 import java.util.Objects;
 
-public class Leitor {
-    private String qrcode;
-    private QRcode info;
+public class  Leitor {
+    private String info;
+    private QRcode qrcode;
 
 
     public Leitor(){
-        qrcode = new String();
-        info = new QRcode();
+        qrcode = new QRcode();
+        info = new String();
     }
 
-    public Leitor(String qrcode) {
-        this.qrcode = qrcode;
+    public Leitor(String info,QRcode qr) {
+        this.qrcode = qr;
         this.info = info;
     }
 
@@ -22,32 +22,33 @@ public class Leitor {
         info = lei.getInfo();
     }
 
-    public String getQrcode() {
+    public QRcode getQrcode() {
         return qrcode;
     }
 
-    public void setQrcode(String qrcode) {
+    public void setQrcode(QRcode qrcode) {
         this.qrcode = qrcode;
     }
 
-    public QRcode getInfo() {
+    public String  getInfo() {
         return info;
     }
 
-    public void setInfo(QRcode info) {
+    public void setInfo(String info) {
         this.info = info;
     }
-    @Override
+
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Leitor)) return false;
         Leitor leitor = (Leitor) o;
-        return Objects.equals(qrcode, leitor.qrcode);
+        return Objects.equals(getInfo(), leitor.getInfo()) &&
+                Objects.equals(getQrcode(), leitor.getQrcode());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(qrcode);
+        return Objects.hash(getInfo(), getQrcode());
     }
 
     public Leitor clone(){

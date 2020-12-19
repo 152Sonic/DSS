@@ -1,4 +1,4 @@
-package data;
+/*package data;
 import business.Localizacao;
 import business.Palete;
 import java.sql.*;
@@ -193,4 +193,4 @@ public class PaletesDAO implements Map<String,Palete> {
 
 
 
-}
+}*/

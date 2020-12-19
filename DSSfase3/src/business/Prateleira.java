@@ -3,13 +3,13 @@ package business;
 import java.util.Objects;
 
 public class Prateleira {
-    private String codPalete;
+    private int codPrateleira;
     private boolean disponibilidade;
-    private String codPrateleira;
+    private int codPalete;
     private Localizacao local;
 
 
-    public Prateleira(String codPal, boolean disponibilidade, String codPrateleira, Localizacao local) {
+    public Prateleira(int codPrateleira, boolean disponibilidade, int codPal, Localizacao local) {
         this.codPalete = codPal;
         this.disponibilidade = disponibilidade;
         this.codPrateleira = codPrateleira;
@@ -17,9 +17,9 @@ public class Prateleira {
     }
 
     public Prateleira(){
-        codPalete = new String();
+        codPalete = -1;
         disponibilidade = false;
-        codPrateleira = new String();
+        codPrateleira = -1;
         local = new Localizacao();
     }
 
@@ -30,11 +30,11 @@ public class Prateleira {
         local = prat.getLocal();
     }
 
-    public String getCodPal(){
+    public int getCodPal(){
         return codPalete;
     }
 
-    public void setCodPalete(String codPalete) {
+    public void setCodPalete(int codPalete) {
         this.codPalete = codPalete;
     }
 
@@ -54,11 +54,11 @@ public class Prateleira {
         this.disponibilidade = disponibilidade;
     }
 
-    public String getCodPrateleira() {
+    public int getCodPrateleira() {
         return codPrateleira;
     }
 
-    public void setCodPrateleira(String codPrateleira) {
+    public void setCodPrateleira(int codPrateleira) {
         this.codPrateleira = codPrateleira;
     }
 

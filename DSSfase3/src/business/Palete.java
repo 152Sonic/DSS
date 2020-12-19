@@ -3,12 +3,12 @@ package business;
 import java.util.Objects;
 
 public class Palete {
-    private String codPalete;
+    private int codPalete;
     private Localizacao localizacao;
-    private String robot;
+    private int robot;
     private String materiaP;
 
-    public Palete(String codPalete, Localizacao localizacao, String robot, String materiaP) {
+    public Palete(int codPalete, Localizacao localizacao, int robot, String materiaP) {
         this.codPalete = codPalete;
         this.localizacao = localizacao;
         this.robot = robot;
@@ -16,9 +16,9 @@ public class Palete {
     }
 
     public Palete(){
-        codPalete = new String();
+        codPalete = -1;
         localizacao = new Localizacao();
-        robot = new String();
+        robot = -1;
         materiaP = new String();
     }
 
@@ -29,11 +29,11 @@ public class Palete {
         materiaP = pal.getMateriaP();
     }
 
-    public String getCodPalete() {
+    public int getCodPalete() {
         return codPalete;
     }
 
-    public void setCodPalete(String codPalete) {
+    public void setCodPalete(int codPalete) {
         this.codPalete = codPalete;
     }
 
@@ -45,11 +45,11 @@ public class Palete {
         this.localizacao = localizacao;
     }
 
-    public String isTransporte() {
+    public int isTransporte() {
         return robot;
     }
 
-    public void setTransporte(String robot) {
+    public void setTransporte(int robot) {
         this.robot = robot;
     }
 
@@ -81,5 +81,20 @@ public class Palete {
 
     public Palete clone(){
         return new Palete(this);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Palete{");
+        sb.append("codPalete=").append(codPalete);
+        sb.append(", localizacao=").append(localizacao);
+        sb.append(", robot=").append(robot);
+        sb.append(", materiaP='").append(materiaP).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
+
+    public boolean isEmpty(){
+        return codPalete == -1 && localizacao.getX() == -1 && localizacao.getY() == -1 && robot == -1 && materiaP.equals("");
     }
 }
