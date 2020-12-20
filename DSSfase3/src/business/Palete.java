@@ -97,4 +97,5 @@ public class Palete {
     public boolean isEmpty(){
         return codPalete == -1 && localizacao.getX() == -1 && localizacao.getY() == -1 && robot == -1 && materiaP.equals("");
     }
+
 }

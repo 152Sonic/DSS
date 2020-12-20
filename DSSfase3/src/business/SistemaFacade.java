@@ -1,5 +1,10 @@
 package business;
 
+import data.EsperaDAO;
+import data.HistoricoDAO;
+import data.PaletesDAO;
+import data.PrateleirasDAO;
+
 import java.util.*;
 
 public class SistemaFacade implements ISistemaFacade {
@@ -11,6 +16,7 @@ public class SistemaFacade implements ISistemaFacade {
     private List<Pair> espera;
     private Gestor gestor;
     private Leitor leitor;
+
 
     public SistemaFacade(){
         rDisp = 0;
@@ -38,10 +44,14 @@ public class SistemaFacade implements ISistemaFacade {
     public SistemaFacade(SistemaFacade system){
         rDisp = system.getrDisp();
         robot = system.getRobot();
+        this.historico = HistoricoDAO.getInstance();
+        this.paletes = PaletesDAO.getInstance();
+        this.prateleiras = PrateleirasDAO.getInstance();
+        this.espera = EsperaDAO.getInstance();
+        /*setEspera(system.getEspera());
         setHistorico(system.getHistorico());
         setPaletes(system.getPaletes());
-        setPrateleiras(system.getPrateleiras());
-        setEspera(system.getEspera());
+        setPrateleiras(system.getPrateleiras());*/
         gestor = system.getGestor();
         leitor = system.getLeitor();
     }
@@ -182,34 +192,32 @@ public class SistemaFacade implements ISistemaFacade {
         }
     }
 
-    public void adicionaPar(Pair p){
-        this.espera.add(p);
-    }
-    public void adicionaPalete(Palete p){
-        this.paletes.put(p.getCodPalete(),p);
-    }
-
-    public void notificaEntrega(Palete p,Localizacao l) {
+    public Palete notificaEntrega(Palete p,Localizacao l) {
         p.setTransporte(-1);
+        Palete palete = p.clone();
         this.robot.setEntregue(0);
+        System.out.println(this.robot.getEntregue());
         if(p.getLocalizacao().equals(l));
         else if (l.isSaida()){
             this.paletes.remove(p.getCodPalete());
             this.robot.setaTranpos(new Palete());
             this.robot.setLocalizacaoFinal(new Localizacao());
+            palete.setLocalizacao(l);
         }
         else{
             for(Map.Entry<Integer,Prateleira> aux: this.prateleiras.entrySet()) {
                 if (aux.getValue().getLocal().equals(l)) {
                     aux.getValue().setDisponibilidade(false);
-                    this.robot.setLocalizacao(aux.getValue().getLocal());
-                    p.setLocalizacao(aux.getValue().getLocal());
+                    this.robot.setLocalizacao(l);
+                    this.historico.get(p.getCodPalete()).setLocalizacao(l);
+                    this.paletes.get(p.getCodPalete()).setLocalizacao(l);
                     aux.getValue().setCodPalete(p.getCodPalete());
                     this.robot.setaTranpos(new Palete());
-                    this.robot.setLocalizacaoFinal(new Localizacao());
+                    palete.setLocalizacao(l);
                 }
             }
         }
+        return palete;
     }
 
     public void comunicaQR(QRcode c){
@@ -218,85 +226,34 @@ public class SistemaFacade implements ISistemaFacade {
         Palete p = new Palete(i,e,-1,c.getMateriaP());
         historico.put(p.getCodPalete(),p);
         paletes.put(p.getCodPalete(),p);
-    }
-
-    public void comunicaOT(){
-        if(this.robot.getaTranpos() != null) {
-            Pair p = this.espera.get(0);
-            this.espera.remove(0);
-            Palete pal = this.paletes.get(p.getX());
-            this.robot.setaTranpos(pal);
-            this.robot.setLocalizacaoFinal((Localizacao) p.getY());
-            System.out.println(this.robot);
+        Iterator<Prateleira> it = prateleiras.values().iterator();
+        int flag = 0;
+        while(it.hasNext() && flag == 0) {
+            Prateleira prat = it.next();
+            if (prat.isDisponibilidade()){
+                flag = 1;
+                espera.add(new Pair(p.getCodPalete(), prat.getLocal()));
+            }
         }
     }
 
-
-
-    /*public void main() {
-
-        Localizacao l1 = new Localizacao(0, 0);
-        Localizacao l2 = new Localizacao(1, 1);
-        Localizacao l3 = new Localizacao(0, 1);
-
-        Robot r1 = new Robot(1,l1,null);
-        this.robot = r1;
-
-        Palete p1 = new Palete(1, l1, -1, "Arroz");
-        Palete p2 = new Palete(2, l2, -1, "Agua");
-        Palete p3 = new Palete(3, l3, -1, "Massa");
-        QRcode qr = new QRcode("Leite",4);
-
-
-        Prateleira pr1 = new Prateleira(1, true, -1, l1);
-        Prateleira pr2 = new Prateleira(2, true, -1, l2);
-        Prateleira pr3 = new Prateleira(3, false, p1.getCodPalete(), l1);
-
-        this.prateleiras.put(pr1.getCodPrateleira(), pr1);
-        this.prateleiras.put(pr2.getCodPrateleira(), pr2);
-        this.prateleiras.put(pr3.getCodPrateleira(), pr3);
-
-        this.paletes.put(p1.getCodPalete(), p1);
-        this.paletes.put(p2.getCodPalete(), p2);
-        this.paletes.put(p3.getCodPalete(), p3);
-
-        this.historico.put(p1.getCodPalete(),p1);
-        this.historico.put(p2.getCodPalete(),p2);
-        this.historico.put(p3.getCodPalete(),p3);
-
-        this.espera.add(2);
-        this.espera.add(1);
-
-
-
-        Map<Integer, Localizacao> palo = consultalistagemdeLocalizacao();
-
-        for(Map.Entry<Integer,Localizacao> i: palo.entrySet()){
-
-            System.out.println("Palete " + i.getKey() + " :" + i.getValue());
+    public boolean comunicaOT(){
+        boolean flag = false;
+        if(this.robot.hasPalete()) {
+            if (!espera.isEmpty()) {
+                Pair p = this.espera.get(0);
+                this.espera.remove(0);
+                Palete pal = this.paletes.get(p.getX());
+                this.robot.setaTranpos(pal);
+                this.robot.setLocalizacaoFinal((Localizacao) p.getY());
+                System.out.println(this.robot);
+            }
+            flag = true;
         }
-        /*for(Map.Entry<Integer,Palete> m : this.historico.entrySet())
-            System.out.println("Palete "+  m.getKey() + " Material: " + m.getValue().getMateriaP());
-
-        comunicaOT();
-        for(int i: this.espera)
-            System.out.println("Palete: "  +  i);
-        System.out.println("Palete: " + this.robot.getaTranpos());
-
-        notificaRecolha(p1);
-        System.out.println("Robot " + p1.isTransporte());
-        for (Map.Entry<Integer, Prateleira> i : this.prateleiras.entrySet()){
-            if (i.getValue().isDisponibilidade())
-                System.out.println("Prateleira " + i.getKey() + " Livre");
-        }
-
-        notificaEntrega(p2,l2);
-        System.out.println("Prateleira" + pr2.getCodPrateleira() + "tem palete " + pr2.getCodPal());
-        for (Map.Entry<Integer, Prateleira> i : this.prateleiras.entrySet()){
-            if (i.getValue().isDisponibilidade())
-                System.out.println("Prateleira " + i.getKey() + " Livre");
-        }
+        return flag;
     }
-*/
 
+    public void add(Prateleira p){
+        this.prateleiras.put(p.getCodPrateleira(),p);
+    }
 }

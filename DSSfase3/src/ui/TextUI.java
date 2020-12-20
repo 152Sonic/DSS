@@ -55,7 +55,14 @@ public class TextUI {
     }
 
     public void run(){
-        /*Localizacao l = new Localizacao(0,0);
+        /*Palete pal = new Palete(1,new Localizacao(0,2),-1,"agua");
+        Prateleira p1 = new Prateleira(1,true,-1,new Localizacao(0,1));
+        Prateleira p2 = new Prateleira(2,false,1,new Localizacao(0,2));
+        Prateleira p3 = new Prateleira(3,true,-1,new Localizacao(1,3));
+        this.model.add(p1);
+        this.model.add(p2);
+        this.model.add(p3);
+        Localizacao l = new Localizacao(0,0);
         Localizacao l1 = new Localizacao(1,1);
         Palete p = new Palete(1,l,-1,"agua");
         Pair p1 = new Pair(p.getCodPalete(),l1);
@@ -189,11 +196,8 @@ public class TextUI {
         Robot r = this.model.getRobot();
         if (r.getEntregue() == 1){
             if ((!r.getaTranpos().getLocalizacao().equals(r.getLocalizacaoFinal()))) {
-                if (!r.getaTranpos().isEmpty()) {
-                    this.model.notificaEntrega(r.getaTranpos(), r.getLocalizacaoFinal());
-                    System.out.println("\nEntrega da palete numero " + r.getaTranpos() + " efetuada!");
-                } else
-                    System.out.println("\nNada a recolher!");
+                Palete p = this.model.notificaEntrega(r.getaTranpos(), r.getLocalizacaoFinal());
+                System.out.println("\nEntrega da palete numero " + p.toString() + " efetuada!");
             }
             else
                 System.out.println("\n Palete encontra-se já no destino!");
@@ -228,8 +232,16 @@ public class TextUI {
     }
 
     public void trataOrdemTransporte(){
-        if(!this.model.getEspera().isEmpty())
-            this.model.comunicaOT();
+        if(!this.model.getEspera().isEmpty()) {
+            boolean flag;
+            flag = this.model.comunicaOT();
+            if(flag){
+                System.out.println("Ordem de transporte concluida");
+            }
+            else{
+                System.out.println("Robot ainda está ocupado");
+            }
+        }
         else{
             System.out.println("\nNão há paletes a recolher");
         }

@@ -86,4 +86,15 @@ public class Prateleira {
     public boolean compara(Palete p){
         return (p.getCodPalete() == this.codPalete);
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Prateleira{");
+        sb.append("codPrateleira=").append(codPrateleira);
+        sb.append(", disponibilidade=").append(disponibilidade);
+        sb.append(", codPalete=").append(codPalete);
+        sb.append(", local=").append(local);
+        sb.append('}');
+        return sb.toString();
+    }
 }

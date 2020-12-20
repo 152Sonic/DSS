@@ -22,8 +22,8 @@ public class Robot {
     }
 
     public Robot(){
-        codRobot = -1;
-        localizacao = new Localizacao();
+        codRobot = 1;
+        localizacao = new Localizacao(0,0);
         aTranpos = new Palete();
         localizacaoFinal = new Localizacao();
         entregue = 0;
@@ -107,5 +107,10 @@ public class Robot {
         sb.append(", localizacaoFinal=").append(localizacaoFinal);
         sb.append('}');
         return sb.toString();
+    }
+
+    //Se não tiver palete dá true
+    public boolean hasPalete(){
+        return aTranpos.getCodPalete() == -1;
     }
 }
