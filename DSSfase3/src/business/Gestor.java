@@ -92,7 +92,7 @@ public class Gestor {
 
     /**
      * Devolve uma cópia da instância
-     * @return
+     * @return gestor
      */
     public Gestor clone(){
         return new Gestor(this);

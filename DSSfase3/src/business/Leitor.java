@@ -92,7 +92,7 @@ public class  Leitor {
 
     /**
      * Devolve uma cópia da instância
-     * @return
+     * @return leitor
      */
     public Leitor clone(){
         return new Leitor(this);
