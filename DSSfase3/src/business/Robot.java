@@ -8,25 +8,21 @@ import java.lang.Object;
  */
 public class Robot {
     private int codRobot;
-    private Localizacao localizacao;
+    private int xRobot;
+    private int yRobot;
     private Palete aTranpos;
-    private Localizacao localizacaoFinal;
+    private int localizacaoXFinal;
+    private int localizacaoYFinal;
     private int entregue;
 
 
-    /**
-     * Construtor parametrizado
-     * @param codRobot
-     * @param localizacao
-     * @param aTranspos
-     * @param lf
-     * @param entregue
-     */
-    public Robot(int codRobot, Localizacao localizacao,Palete aTranspos,Localizacao lf,int entregue) {
+    public Robot(int codRobot, int xr, int yr,Palete aTranspos,int xf, int yf,int entregue) {
         this.codRobot = codRobot;
-        this.localizacao = localizacao;
+        this.xRobot = xr;
+        this.yRobot = yr;
         this.aTranpos = aTranspos;
-        this.localizacaoFinal = lf;
+        this.localizacaoXFinal = xf;
+        this.localizacaoYFinal = yf;
         this.entregue = entregue;
     }
 
@@ -35,9 +31,11 @@ public class Robot {
      */
     public Robot(){
         codRobot = 1;
-        localizacao = new Localizacao(0,0);
+        xRobot = 0;
+        yRobot = 0;
         aTranpos = new Palete();
-        localizacaoFinal = new Localizacao();
+        localizacaoXFinal = -1;
+        localizacaoYFinal = -1;
         entregue = 0;
     }
 
@@ -47,9 +45,11 @@ public class Robot {
      */
     public Robot(Robot ro){
         codRobot = ro.getCodRobot();
-        localizacao = ro.getLocalizacao();
+        xRobot = ro.getxRobot();
+        yRobot = ro.getyRobot();
         aTranpos  = ro.getaTranpos();
-        localizacaoFinal = ro.getLocalizacaoFinal();
+        localizacaoXFinal = ro.getLocalizacaoXFinal();
+        localizacaoYFinal = ro.getLocalizacaoYFinal();
         entregue =  ro.getEntregue();
     }
 
@@ -67,22 +67,6 @@ public class Robot {
      */
     public void setEntregue(int entregue) {
         this.entregue = entregue;
-    }
-
-    /**
-     * Devolve a localização final
-     * @return localização
-     */
-    public Localizacao getLocalizacaoFinal() {
-        return localizacaoFinal;
-    }
-
-    /**
-     * Define a localização final
-     * @param localizacaoFinal
-     */
-    public void setLocalizacaoFinal(Localizacao localizacaoFinal) {
-        this.localizacaoFinal = localizacaoFinal;
     }
 
     /**
@@ -117,44 +101,56 @@ public class Robot {
         this.codRobot = codRobot;
     }
 
-    /**
-     * Devolve a localização do robot
-     * @return localização
-     */
-    public Localizacao getLocalizacao() {
-        return localizacao;
+
+    public int getxRobot() {
+        return xRobot;
     }
 
-    /**
-     * Define a localização do robot
-     * @param localizacao
-     */
-    public void setLocalizacao(Localizacao localizacao) {
-        this.localizacao = localizacao;
+    public void setxRobot(int xRobot) {
+        this.xRobot = xRobot;
     }
 
-    /**
-     * Verifica a igualdade com outro objeto
-     * @param o Objeto a comparar
-     * @return boolean
-     */
+    public int getyRobot() {
+        return yRobot;
+    }
+
+    public void setyRobot(int yRobot) {
+        this.yRobot = yRobot;
+    }
+
+    public int getLocalizacaoXFinal() {
+        return localizacaoXFinal;
+    }
+
+    public void setLocalizacaoXFinal(int localizacaoXFinal) {
+        this.localizacaoXFinal = localizacaoXFinal;
+    }
+
+    public int getLocalizacaoYFinal() {
+        return localizacaoYFinal;
+    }
+
+    public void setLocalizacaoYFinal(int localizacaoYFinal) {
+        this.localizacaoYFinal = localizacaoYFinal;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Robot)) return false;
         Robot robot = (Robot) o;
         return getCodRobot() == robot.getCodRobot() &&
+                getxRobot() == robot.getxRobot() &&
+                getyRobot() == robot.getyRobot() &&
+                getLocalizacaoXFinal() == robot.getLocalizacaoXFinal() &&
+                getLocalizacaoYFinal() == robot.getLocalizacaoYFinal() &&
                 getEntregue() == robot.getEntregue() &&
-                Objects.equals(getLocalizacao(), robot.getLocalizacao()) &&
-                Objects.equals(getaTranpos(), robot.getaTranpos()) &&
-                Objects.equals(getLocalizacaoFinal(), robot.getLocalizacaoFinal());
+                Objects.equals(getaTranpos(), robot.getaTranpos());
     }
 
-    /**
-     * Método hashCode do objeto
-     * @return hash do objeto
-     */
+    @Override
     public int hashCode() {
-        return Objects.hash(getCodRobot(), getLocalizacao(), getaTranpos(), getLocalizacaoFinal(), getEntregue());
+        return Objects.hash(getCodRobot(), getxRobot(), getyRobot(), getaTranpos(), getLocalizacaoXFinal(), getLocalizacaoYFinal(), getEntregue());
     }
 
     /**
@@ -165,16 +161,16 @@ public class Robot {
         return new Robot(this);
     }
 
-    /**
-     * Método toString do objeto
-     * @return Objeto em modo string
-     */
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Robot{");
         sb.append("codRobot=").append(codRobot);
-        sb.append(", localizacao=").append(localizacao);
+        sb.append(", xRobot=").append(xRobot);
+        sb.append(", yRobot=").append(yRobot);
         sb.append(", aTranpos=").append(aTranpos);
-        sb.append(", localizacaoFinal=").append(localizacaoFinal);
+        sb.append(", localizacaoXFinal=").append(localizacaoXFinal);
+        sb.append(", localizacaoYFinal=").append(localizacaoYFinal);
+        sb.append(", entregue=").append(entregue);
         sb.append('}');
         return sb.toString();
     }
@@ -183,8 +179,8 @@ public class Robot {
      * Método que nos diz se o robot tem uma determinada palete
      * @return boolean
      */
-    //Se não tiver palete dá true
+    //Se tiver palete dá true
     public boolean hasPalete(){
-        return aTranpos.getCodPalete() == -1;
+        return aTranpos.getCodPalete() != -1;
     }
 }

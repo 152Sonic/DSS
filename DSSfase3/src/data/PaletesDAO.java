@@ -13,15 +13,12 @@ public class PaletesDAO implements Map<Integer,Palete> {
     private PaletesDAO(){
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
         Statement stm = conn.createStatement()) {
-            String sql = "CREATE TABLE IF NOT EXISTS localizacao (" +
-                    "x int NOT NULL PRIMARY KEY," +
-                    "y int NOT NULL PRIMARY KEY DEFAULT 0)";
-            stm.executeUpdate(sql);
-            sql = "CREATE TABLE IF NOT EXISTS paletes (" +
-                    "codPaletes int NOT NL PRIMARY KEY," +
-                    "localizacao DEFAULT NULL," +
+            String sql = "CREATE TABLE IF NOT EXISTS paletes (" +
+                    "codPaletes int NOT NULL PRIMARY KEY," +
+                    "x int DEFAULT NULL," +
+                    "y int DEFAULT NULL," +
                     "transporte int DEFAULT NULL," +
-                    "materialP varchar(100), foreign key(Localizacao) references localizacao(x,y))";  // Assume-se uma relação 1-n entre Turma e Aluno
+                    "materialP varchar(100))";  // Assume-se uma relação 1-n entre Turma e Aluno
             stm.executeUpdate(sql);
         } catch (SQLException e) {
             // Erro a criar tabela...
@@ -42,11 +39,9 @@ public class PaletesDAO implements Map<Integer,Palete> {
     public Palete remove(Object key) {
         Palete t = this.get(key);
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
-             Statement stm = conn.createStatement();
-             PreparedStatement pstm = conn.prepareStatement("UPDATE alunos SET Turma=? WHERE Num=?")) {
-            // apagar a palete
-            stm.executeUpdate("DELETE FROM paletes WHERE codPalete='" + key + "'");
-        }catch (Exception e) {
+             Statement stm = conn.createStatement()) {
+            stm.executeUpdate("DELETE FROM paletes WHERE codPaletes='"+key+"'");
+        } catch (Exception e) {
             // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
@@ -55,54 +50,46 @@ public class PaletesDAO implements Map<Integer,Palete> {
     }
 
     public Palete get(Object key) {
-        Palete p = null;
+        Palete a = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
              Statement stm = conn.createStatement();
-             ResultSet rs = stm.executeQuery("SELECT * FROM paletes WHERE codPalete='"+key+"'")) {
+             ResultSet rs = stm.executeQuery("SELECT * FROM paletes WHERE codPaletes='"+key+"'")) {
             if (rs.next()) {  // A chave existe na tabela
-                Localizacao l = null;
-                String sql = "SELECT * FROM localizacao WHERE codPalete='"+rs.getString("Localizacao")+"'";
-                try (ResultSet rsa = stm.executeQuery(sql)) {
-                    if (rsa.next()) {  // Encontrou a palete
-                        l = new Localizacao(rs.getInt("X"),
-                                rsa.getInt("Y"));
-                    } else {
-                        l = null;
-                    }
-                }
-                p = new Palete(rs.getInt("codPaletes"), l, rs.getInt("Transporte"),rs.getString("Material"));
+                // Reconstruir o aluno com os dados obtidos da BD - a chave estranjeira da turma, não é utilizada aqui.
+                a = new Palete(rs.getInt("codPaletes"), rs.getInt("x"), rs.getInt("y"),rs.getInt("transporte"),rs.getString("materialP"));
             }
         } catch (SQLException e) {
             // Database error!
             e.printStackTrace();
             throw new NullPointerException(e.getMessage());
         }
-        return p;
+        return a;
     }
 
-    //HNNNNNNNNNNNNNNNNN
     public Set<Entry<Integer, Palete>> entrySet() {
-        throw new NullPointerException("public Set<Map.Entry<String,Aluno>> entrySet() not implemented!");
+        Set<Entry<Integer,Palete>> r = new HashSet<>();
+        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+             Statement stm = conn.createStatement();
+             ResultSet rs = stm.executeQuery("SELECT * from paletes")){
+            while(rs.next()){
+                r.add(new AbstractMap.SimpleEntry<>(rs.getInt("codPaletes"),this.get(rs.getInt("codPaletes"))));
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+        return r;
     }
 
     public Palete put(Integer key, Palete a) {
         Palete res = null;
-        Localizacao l = a.getLocalizacao();
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
              Statement stm = conn.createStatement()) {
-            // Actualizar o localização
-            stm.executeUpdate(
-                    "INSERT INTO localizacao " +
-                            "VALUES ('"+ l.getX()+ "', "+
-                            l.getY()+")");
-
             // Actualizar o palete
             stm.executeUpdate(
-                    "INSERT INTO paletes" +
-                            "VALUES ('"+ a.getCodPalete()+ "', '"+
-                            a.getLocalizacao()+"', '" +
-                            a.isTransporte()+ "', "+
-                            a.getMateriaP()+")");
+                    "INSERT INTO paletes VALUES ('"+a.getCodPalete()+"', '"+a.getX()+"', '"+a.getY()+ "', '" +a.isTransporte()+"', '"+a.getMateriaP()+"') "  +
+                        "ON DUPLICATE KEY UPDATE x=VALUES(x), y=VALUES(y), transporte =VALUES(transporte), materialP = VALUES(materialP)");
         } catch (SQLException e) {
             // Database error!
             e.printStackTrace();
@@ -145,7 +132,21 @@ public class PaletesDAO implements Map<Integer,Palete> {
     }
 
     public Collection<Palete> values() {
-        return null;
+        Collection<Palete> res = new HashSet<>();
+        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+             Statement stm = conn.createStatement();
+             ResultSet rs = stm.executeQuery("SELECT codPaletes FROM paletes")) { // ResultSet com os ids de todas as turmas
+            while (rs.next()) {
+                String idt = rs.getString("codPaletes"); // Obtemos um id de turma do ResultSet
+                Palete t = this.get(idt);                    // Utilizamos o get para construir as turmas uma a uma
+                res.add(t);                                 // Adiciona a turma ao resultado.
+            }
+        } catch (Exception e) {
+            // Database error!
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+        return res;
     }
 
     public Palete getOrDefault(Object key, Palete defaultValue) {

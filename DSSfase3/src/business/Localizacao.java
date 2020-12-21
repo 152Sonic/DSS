@@ -114,9 +114,6 @@ public class Localizacao {
      * Método que nos diz se corresponde à entrada
      * @return boolean
      */
-    public boolean isEntrada(){
-        return x == 0 && y == 0;
-    }
 
     /**
      * Método que nos diz se corresponde à saída

@@ -16,15 +16,12 @@ public class HistoricoDAO implements Map<Integer,Palete> {
     private HistoricoDAO(){
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
         Statement stm = conn.createStatement()) {
-            String sql = "CREATE TABLE IF NOT EXISTS localizacao (" +
-                    "x int NOT NULL PRIMARY KEY," +
-                    "y int NOT NULL PRIMARY KEY DEFAULT 0)";
-            stm.executeUpdate(sql);
-            sql = "CREATE TABLE IF NOT EXISTS paletes (" +
-                    "codPaletes int NOT NL PRIMARY KEY," +
-                    "localizacao DEFAULT NULL," +
+            String sql = "CREATE TABLE IF NOT EXISTS historico (" +
+                    "codPaletes int NOT NULL PRIMARY KEY," +
+                    "x int DEFAULT NULL," +
+                    "y int DEFAULT NULL," +
                     "transporte int DEFAULT NULL," +
-                    "materialP varchar(100), foreign key(Localizacao) references localizacao(x,y))";  // Assume-se uma relação 1-n entre Turma e Aluno
+                    "materialP varchar(100))";  // Assume-se uma relação 1-n entre Turma e Aluno
             stm.executeUpdate(sql);
         } catch (SQLException e) {
             // Erro a criar tabela...
@@ -61,22 +58,12 @@ public class HistoricoDAO implements Map<Integer,Palete> {
 
     public Palete put(Integer key, Palete a) {
         Palete res = null;
-        Localizacao l = a.getLocalizacao();
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
              Statement stm = conn.createStatement()) {
-            // Actualizar o localização
-            stm.executeUpdate(
-                    "INSERT INTO localizacao " +
-                            "VALUES ('"+ l.getX()+ "', "+
-                            l.getY()+")");
-
             // Actualizar o palete
             stm.executeUpdate(
-                    "INSERT INTO paletes" +
-                            "VALUES ('"+ a.getCodPalete()+ "', '"+
-                            a.getLocalizacao()+"', '" +
-                            a.isTransporte()+ "', "+
-                            a.getMateriaP()+") ");
+                    "INSERT INTO historico VALUES ('"+a.getCodPalete()+"', '"+a.getX()+"', '"+a.getY()+ "', '" +a.isTransporte()+"', '"+a.getMateriaP()+"')" +
+                           "ON DUPLICATE KEY UPDATE x=VALUES(x), y=VALUES(y), transporte =VALUES(transporte), materialP = VALUES(materialP)");
         } catch (SQLException e) {
             // Database error!
             e.printStackTrace();
@@ -99,7 +86,20 @@ public class HistoricoDAO implements Map<Integer,Palete> {
     }
 
     public Palete get(Object key) {
-        return null;
+        Palete a = null;
+        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+             Statement stm = conn.createStatement();
+             ResultSet rs = stm.executeQuery("SELECT * FROM historico WHERE codPaletes='"+key+"'")) {
+            if (rs.next()) {  // A chave existe na tabela
+                // Reconstruir o aluno com os dados obtidos da BD - a chave estranjeira da turma, não é utilizada aqui.
+                a = new Palete(rs.getInt("codPaletes"), rs.getInt("x"), rs.getInt("y"),rs.getInt("transporte"),rs.getString("materialP"));
+            }
+        } catch (SQLException e) {
+            // Database error!
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+        return a;
     }
 
     public Palete remove(Object key) {
@@ -119,7 +119,21 @@ public class HistoricoDAO implements Map<Integer,Palete> {
     }
 
     public Collection<Palete> values() {
-        return null;
+        Collection<Palete> res = new HashSet<>();
+        try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+             Statement stm = conn.createStatement();
+             ResultSet rs = stm.executeQuery("SELECT codPaletes FROM historico")) { // ResultSet com os ids de todas as turmas
+            while (rs.next()) {
+                String idt = rs.getString("codPaletes"); // Obtemos um id de turma do ResultSet
+                Palete t = this.get(idt);                    // Utilizamos o get para construir as turmas uma a uma
+                res.add(t);                                 // Adiciona a turma ao resultado.
+            }
+        } catch (Exception e) {
+            // Database error!
+            e.printStackTrace();
+            throw new NullPointerException(e.getMessage());
+        }
+        return res;
     }
 
     public Set<Entry<Integer, Palete>> entrySet() {

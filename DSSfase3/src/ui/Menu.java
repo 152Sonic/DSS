@@ -60,6 +60,7 @@ public class Menu {
     }
 
     private void showMenuPrincipal() {
+        System.out.println("\n ** B e m   V i n d o  **  C h i n a   T o w n **");
         System.out.println("\n *** Menu *** ");
         System.out.println("1 - Gestor");
         System.out.println("2 - Leitor");

@@ -7,9 +7,10 @@ import java.util.Objects;
  */
 public class Prateleira {
     private int codPrateleira;
-    private boolean disponibilidade;
+    private int disponibilidade; // 0 -false ; 1 - true
     private int codPalete;
-    private Localizacao local;
+    private int x;
+    private int y;
 
 
     /**
@@ -19,11 +20,12 @@ public class Prateleira {
      * @param codPal
      * @param local
      */
-    public Prateleira(int codPrateleira, boolean disponibilidade, int codPal, Localizacao local) {
+    public Prateleira(int codPrateleira, int disponibilidade, int codPal, int x, int y) {
         this.codPalete = codPal;
         this.disponibilidade = disponibilidade;
         this.codPrateleira = codPrateleira;
-        this.local = local;
+        this.x = x;
+        this.y = y;
     }
 
     /**
@@ -31,9 +33,10 @@ public class Prateleira {
      */
     public Prateleira(){
         codPalete = -1;
-        disponibilidade = false;
+        disponibilidade = 1;
         codPrateleira = -1;
-        local = new Localizacao();
+        x = -1;
+        y = -1;
     }
 
     /**
@@ -44,7 +47,8 @@ public class Prateleira {
         codPalete = prat.getCodPal();
         disponibilidade = prat.isDisponibilidade();
         codPrateleira = prat.getCodPrateleira();
-        local = prat.getLocal();
+        x = prat.getX();
+        y = prat.getY();
     }
 
     /**
@@ -63,28 +67,27 @@ public class Prateleira {
         this.codPalete = codPalete;
     }
 
-    /**
-     * Devolve a localização
-     * @return localização
-     */
-    public Localizacao getLocal() {
-        return local;
+    public int getX() {
+        return x;
     }
 
-    /**
-     * Define a localização
-     * @param local
-     */
-    public void setLocal(Localizacao local) {
-        this.local = local;
+    public void setX(int x) {
+        this.x = x;
     }
 
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
 
     /**
      * Método que nos diz se está disponível
      * @return boolean
      */
-    public boolean isDisponibilidade() {
+    public int isDisponibilidade() {
         return disponibilidade;
     }
 
@@ -92,7 +95,7 @@ public class Prateleira {
      * Define a disponibiliadade
      * @param disponibilidade
      */
-    public void setDisponibilidade(boolean disponibilidade) {
+    public void setDisponibilidade(int disponibilidade) {
         this.disponibilidade = disponibilidade;
     }
 
@@ -113,27 +116,21 @@ public class Prateleira {
     }
 
 
-    /**
-     * Verifica a igualdade com outro objeto
-     * @param o Objeto a comparar
-     * @return boolean
-     */
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Prateleira)) return false;
         Prateleira that = (Prateleira) o;
-        return disponibilidade == that.disponibilidade &&
-                Objects.equals(codPalete, that.codPalete) &&
-                Objects.equals(codPrateleira, that.codPrateleira) &&
-                Objects.equals(local, that.local);
+        return getCodPrateleira() == that.getCodPrateleira() &&
+                isDisponibilidade() == that.isDisponibilidade() &&
+                codPalete == that.codPalete &&
+                getX() == that.getX() &&
+                getY() == that.getY();
     }
 
-    /**
-     * Método hashCode do objeto
-     * @return hash do objeto
-     */
+    @Override
     public int hashCode() {
-        return Objects.hash(codPalete, disponibilidade, codPrateleira, local);
+        return Objects.hash(getCodPrateleira(), isDisponibilidade(), codPalete, getX(), getY());
     }
 
     /**
@@ -153,16 +150,14 @@ public class Prateleira {
         return (p.getCodPalete() == this.codPalete);
     }
 
-    /**
-     * Método toString do objeto
-     * @return Objeto em modo string
-     */
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Prateleira{");
         sb.append("codPrateleira=").append(codPrateleira);
         sb.append(", disponibilidade=").append(disponibilidade);
         sb.append(", codPalete=").append(codPalete);
-        sb.append(", local=").append(local);
+        sb.append(", x=").append(x);
+        sb.append(", y=").append(y);
         sb.append('}');
         return sb.toString();
     }

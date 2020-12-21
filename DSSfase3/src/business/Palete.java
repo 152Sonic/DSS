@@ -8,20 +8,16 @@ import java.util.Objects;
  */
 public class Palete {
     private int codPalete;
-    private Localizacao localizacao;
+    private int x;
+    private int y;
     private int robot;
     private String materiaP;
 
-    /**
-     * Construtor parametrizado
-     * @param codPalete
-     * @param localizacao
-     * @param robot
-     * @param materiaP
-     */
-    public Palete(int codPalete, Localizacao localizacao, int robot, String materiaP) {
+
+    public Palete(int codPalete, int x, int y, int robot, String materiaP) {
         this.codPalete = codPalete;
-        this.localizacao = localizacao;
+        this.x = x;
+        this.y = y;
         this.robot = robot;
         this.materiaP = materiaP;
     }
@@ -31,7 +27,8 @@ public class Palete {
      */
     public Palete(){
         codPalete = -1;
-        localizacao = new Localizacao();
+        x = -1;
+        y = -1;
         robot = -1;
         materiaP = new String();
     }
@@ -42,7 +39,8 @@ public class Palete {
      */
     public Palete(Palete pal){
         codPalete = pal.getCodPalete();
-        localizacao = pal.getLocalizacao();
+        x = pal.getX();
+        y = pal.getY();
         robot = pal.isTransporte();
         materiaP = pal.getMateriaP();
     }
@@ -63,20 +61,20 @@ public class Palete {
         this.codPalete = codPalete;
     }
 
-    /**
-     * Devolve a localização
-     * @return localização
-     */
-    public Localizacao getLocalizacao() {
-        return localizacao;
+    public int getX() {
+        return x;
     }
 
-    /**
-     * Define a localização
-     * @param localizacao
-     */
-    public void setLocalizacao(Localizacao localizacao) {
-        this.localizacao = localizacao;
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
     }
 
     /**
@@ -112,29 +110,23 @@ public class Palete {
         this.materiaP = materiaP;
     }
 
-    /**
-     * Verifica a igualdade com outro objeto
-     * @param o Objeto a comparar
-     * @return boolean
-     */
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Palete)) return false;
         Palete palete = (Palete) o;
-        return robot == palete.robot &&
-                Objects.equals(codPalete, palete.codPalete) &&
-                Objects.equals(localizacao, palete.localizacao) &&
-                Objects.equals(materiaP, palete.materiaP);
+        return getCodPalete() == palete.getCodPalete() &&
+                getX() == palete.getX() &&
+                getY() == palete.getY() &&
+                robot == palete.robot &&
+                Objects.equals(getMateriaP(), palete.getMateriaP());
     }
 
-    /**
-     * Método hashCode do objeto
-     * @return hash do objeto
-     */
+    @Override
     public int hashCode() {
-        return Objects.hash(codPalete, localizacao, robot, materiaP);
+        return Objects.hash(getCodPalete(), getX(), getY(), robot, getMateriaP());
     }
-
 
     /**
      * Devolve uma cópia da instância
@@ -148,10 +140,12 @@ public class Palete {
      * Método toString do objeto
      * @return Objeto em modo string
      */
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Palete{");
         sb.append("codPalete=").append(codPalete);
-        sb.append(", localizacao=").append(localizacao);
+        sb.append(", x = ").append(x);
+        sb.append(", y = ").append(y);
         sb.append(", robot=").append(robot);
         sb.append(", materiaP='").append(materiaP).append('\'');
         sb.append('}');
@@ -163,7 +157,7 @@ public class Palete {
      * @return boolean
      */
     public boolean isEmpty(){
-        return codPalete == -1 && localizacao.getX() == -1 && localizacao.getY() == -1 && robot == -1 && materiaP.equals("");
+        return codPalete == -1 && x == -1 && y == -1 && robot == -1 && materiaP.equals("");
     }
 
 }

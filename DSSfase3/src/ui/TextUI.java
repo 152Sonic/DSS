@@ -8,6 +8,7 @@ package ui;
 
 import business.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -55,20 +56,6 @@ public class TextUI {
     }
 
     public void run(){
-        /*Palete pal = new Palete(1,new Localizacao(0,2),-1,"agua");
-        Prateleira p1 = new Prateleira(1,true,-1,new Localizacao(0,1));
-        Prateleira p2 = new Prateleira(2,false,1,new Localizacao(0,2));
-        Prateleira p3 = new Prateleira(3,true,-1,new Localizacao(1,3));
-        this.model.add(p1);
-        this.model.add(p2);
-        this.model.add(p3);
-        Localizacao l = new Localizacao(0,0);
-        Localizacao l1 = new Localizacao(1,1);
-        Palete p = new Palete(1,l,-1,"agua");
-        Pair p1 = new Pair(p.getCodPalete(),l1);
-        this.model.adicionaPar(p1);
-        this.model.adicionaPalete(p);
-        System.out.println(this.model.getEspera());*/
         do{
             menu.executaP();
             switch (menu.getOpcao()){
@@ -135,9 +122,9 @@ public class TextUI {
 
     public void trataListaLocalizacoes(){
         System.out.println("** Lista de localizacoes de paletes **\n");
-        Map<Integer, Localizacao> p = this.model.consultalistagemdeLocalizacao();
-        for(Map.Entry<Integer,Localizacao> aux : p.entrySet())
-            System.out.println("A palete numero " + aux.getKey() + " esta  em " + aux.getValue().toString());
+        Map<Integer, Map.Entry<Integer,Integer>> p = this.model.consultalistagemdeLocalizacao();
+        for(Map.Entry<Integer,Map.Entry<Integer,Integer>> aux : p.entrySet())
+            System.out.println("A palete numero " + aux.getKey() + " esta em x = " + aux.getValue().getKey() + ", y = " + aux.getValue().getKey());
     }
 
     public void trataDoQR(){
@@ -195,8 +182,8 @@ public class TextUI {
     public void trataDaEntrega() {
         Robot r = this.model.getRobot();
         if (r.getEntregue() == 1){
-            if ((!r.getaTranpos().getLocalizacao().equals(r.getLocalizacaoFinal()))) {
-                Palete p = this.model.notificaEntrega(r.getaTranpos(), r.getLocalizacaoFinal());
+            if ((!(r.getaTranpos().getX() == r.getLocalizacaoXFinal() && r.getaTranpos().getY() == r.getLocalizacaoYFinal()))) {
+                Palete p = this.model.notificaEntrega(r.getaTranpos(), r.getLocalizacaoXFinal(),r.getLocalizacaoYFinal());
                 System.out.println("\nEntrega da palete numero " + p.toString() + " efetuada!");
             }
             else
@@ -232,7 +219,7 @@ public class TextUI {
     }
 
     public void trataOrdemTransporte(){
-        if(!this.model.getEspera().isEmpty()) {
+        if(this.model.getEspera().size() > 0) {
             boolean flag;
             flag = this.model.comunicaOT();
             if(flag){

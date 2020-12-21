@@ -4,11 +4,9 @@ import business.Palete;
 import business.Prateleira;
 
 import java.sql.*;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-    public class PrateleirasDAO implements Map<Integer, Prateleira> {
+public class PrateleirasDAO implements Map<Integer, Prateleira> {
         private static PrateleirasDAO singleton = null;
 
 
@@ -16,22 +14,19 @@ import java.util.Set;
             try (Connection conn =
                          DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
                  Statement stm = conn.createStatement()) {
-                String sql = "CREATE TABLE IF NOT EXISTS localizacao (" +
-                        "x int NOT NULL PRIMARY KEY," +
-                        "y int NOT NULL PRIMARY KEY DEFAULT 0)";
-                stm.executeUpdate(sql);
-                sql = "CREATE TABLE IF NOT EXISTS gestores (" +
+                String sql = "CREATE TABLE IF NOT EXISTS prateleiras (" +
                         "codPrateleira int NOT NULL PRIMARY KEY," +
-                        "disponibilidade boolean DEFAULT NULL," +
+                        "disponibilidade int DEFAULT NULL," +
                         "codPalete int DEFAULT NULL," +
-                        "local  DEFAULT NULL," +
-                        "foreign key(Localizacao) references localizacao(x,y))";
+                        "x int  DEFAULT NULL," +
+                        "y int  DEFAULT NULL)";
                 stm.executeUpdate(sql);
             } catch (SQLException e) {
                 e.printStackTrace();
                 throw new NullPointerException(e.getMessage());
             }
         }
+
 
         public static PrateleirasDAO getInstance() {
             if (PrateleirasDAO.singleton == null) {
@@ -44,22 +39,11 @@ import java.util.Set;
 
         public Prateleira put(Integer key, Prateleira a) {
             Prateleira res = null;
-            Localizacao l = a.getLocal();
             try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
                  Statement stm = conn.createStatement()) {
-                // Actualizar o localização
-                stm.executeUpdate(
-                        "INSERT INTO localizacao " +
-                                "VALUES ('"+ l.getX()+ "', "+
-                                l.getY()+") ");
-
                 // Actualizar o palete
-                stm.executeUpdate(
-                        "INSERT INTO prateleira" +
-                                "VALUES ('"+ a.getCodPrateleira()+ "', '"+
-                                a.isDisponibilidade()+"', '" +
-                                a.getCodPal()+ "', "+
-                                a.getLocal()+") ");
+                stm.executeUpdate("INSERT INTO prateleiras VALUES ('"+a.getCodPrateleira()+"', '"+a.isDisponibilidade()+"', '"+a.getCodPal()+ "', '" +a.getX()+"', '"+a.getY()+"') "  +
+                        "ON DUPLICATE KEY UPDATE disponibilidade=VALUES(disponibilidade), codPalete=VALUES(codPalete), x =VALUES(x), y = VALUES(y)");
             } catch (SQLException e) {
                 // Database error!
                 e.printStackTrace();
@@ -69,7 +53,19 @@ import java.util.Set;
         }
 
         public Set<Entry<Integer, Prateleira>> entrySet() {
-            return null;
+            Set<Entry<Integer,Prateleira>> r = new HashSet<>();
+            try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+                 Statement stm = conn.createStatement();
+                 ResultSet rs = stm.executeQuery("SELECT * from prateleiras")){
+                while(rs.next()){
+                    r.add(new AbstractMap.SimpleEntry<>(rs.getInt("codPrateleira"),this.get(rs.getInt("codPrateleira"))));
+                }
+            }
+            catch (Exception e){
+                e.printStackTrace();
+                throw new NullPointerException(e.getMessage());
+            }
+            return r;
         }
 
         public int size() {
@@ -89,7 +85,20 @@ import java.util.Set;
         }
 
         public Prateleira get(Object key) {
-            return null;
+            Prateleira a = null;
+            try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+                 Statement stm = conn.createStatement();
+                 ResultSet rs = stm.executeQuery("SELECT * FROM prateleiras WHERE codPrateleira='"+key+"'")) {
+                if (rs.next()) {  // A chave existe na tabela
+                    // Reconstruir o aluno com os dados obtidos da BD - a chave estranjeira da turma, não é utilizada aqui.
+                    a = new Prateleira(rs.getInt("codPrateleira"), rs.getInt("disponibilidade"), rs.getInt("codPalete"),rs.getInt("x"),rs.getInt("y"));
+                }
+            } catch (SQLException e) {
+                // Database error!
+                e.printStackTrace();
+                throw new NullPointerException(e.getMessage());
+            }
+            return a;
         }
 
         public Prateleira remove(Object key) {
@@ -109,6 +118,22 @@ import java.util.Set;
         }
 
         public Collection<Prateleira> values() {
-            return null;
+            Collection<Prateleira> res = new HashSet<>();
+            try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
+                 Statement stm = conn.createStatement();
+                 ResultSet rs = stm.executeQuery("SELECT codPrateleira FROM prateleiras")) { // ResultSet com os ids de todas as turmas
+                while (rs.next()) {
+                    String idt = rs.getString("codPrateleira"); // Obtemos um id de turma do ResultSet
+                    Prateleira t = this.get(idt);                    // Utilizamos o get para construir as turmas uma a uma
+                    res.add(t);                                 // Adiciona a turma ao resultado.
+                }
+            } catch (Exception e) {
+                // Database error!
+                e.printStackTrace();
+                throw new NullPointerException(e.getMessage());
+            }
+            return res;
         }
+
+
     }

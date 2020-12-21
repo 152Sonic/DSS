@@ -16,7 +16,7 @@ public class SistemaFacade implements ISistemaFacade {
     private Map<Integer,Palete> paletes;
     private Map<Integer,Palete> historico;
     private Map<Integer,Prateleira> prateleiras;
-    private List<Pair> espera;
+    private List<Palete> espera;
     private Gestor gestor;
     private Leitor leitor;
 
@@ -47,7 +47,7 @@ public class SistemaFacade implements ISistemaFacade {
      * @param l
      */
     public SistemaFacade(int rDisp, Robot robot, Map<Integer,Palete> paletes, Map<Integer,Palete> historico,
-                         Map<Integer,Prateleira> prateleiras, List<Pair> espera, Gestor gestor, Leitor l){
+                         Map<Integer,Prateleira> prateleiras, List<Palete> espera, Gestor gestor, Leitor l){
         this.rDisp = rDisp;
         this.robot = robot;
         setHistorico(historico);
@@ -65,14 +65,10 @@ public class SistemaFacade implements ISistemaFacade {
     public SistemaFacade(SistemaFacade system){
         rDisp = system.getrDisp();
         robot = system.getRobot();
-        this.historico = HistoricoDAO.getInstance();
-        this.paletes = PaletesDAO.getInstance();
-        this.prateleiras = PrateleirasDAO.getInstance();
-        this.espera = EsperaDAO.getInstance();
-        /*setEspera(system.getEspera());
+        setEspera(system.getEspera());
         setHistorico(system.getHistorico());
         setPaletes(system.getPaletes());
-        setPrateleiras(system.getPrateleiras());*/
+        setPrateleiras(system.getPrateleiras());
         gestor = system.getGestor();
         leitor = system.getLeitor();
     }
@@ -97,20 +93,18 @@ public class SistemaFacade implements ISistemaFacade {
      * Devolve a lista de espera
      * @return List<Pair>
      */
-    public List<Pair> getEspera() {
-        List<Pair> aux = new ArrayList<>();
-        for(Pair p: this.espera)
-            aux.add(p);
-        return aux;
+    public List<Palete> getEspera() {
+        List<Palete> p = EsperaDAO.getToList();
+        return p;
     }
 
     /**
      * Define a lista de espera
      * @param espera
      */
-    public void setEspera(List<Pair> espera) {
+    public void setEspera(List<Palete> espera) {
         this.espera = new ArrayList<>();
-        for(Pair p: espera)
+        for(Palete p: espera)
             this.espera.add(p);
     }
 
@@ -270,10 +264,10 @@ public class SistemaFacade implements ISistemaFacade {
      * Método que faz a listagem de todos os códigos de paletes e as correspondentes localizações
      * @return Map<Integer, Localizacao>
      */
-    public Map<Integer, Localizacao> consultalistagemdeLocalizacao() {
-        Map<Integer, Localizacao> consultas = new HashMap<>();
+    public Map<Integer, Map.Entry<Integer,Integer>> consultalistagemdeLocalizacao() {
+        Map<Integer, Map.Entry<Integer,Integer>> consultas = new HashMap<>();
         for (Map.Entry<Integer, Palete> p : this.paletes.entrySet()) {
-            consultas.put(p.getKey(), p.getValue().getLocalizacao());
+            consultas.put(p.getKey(), new AbstractMap.SimpleEntry<>(p.getValue().getX(),p.getValue().getY()));
         }
         return consultas;
     }
@@ -286,44 +280,58 @@ public class SistemaFacade implements ISistemaFacade {
     public void notificaRecolha(Palete p){
         p.setTransporte(robot.getCodRobot());
         this.robot.setEntregue(1);
-        if (!p.getLocalizacao().isEntrada()) {
-            for (Map.Entry<Integer, Prateleira> aux : this.prateleiras.entrySet()) {
-                if ((aux.getValue().getCodPal() == p.getCodPalete())) {
-                    aux.getValue().setDisponibilidade(true);
-                    aux.getValue().setCodPalete(-1);
+        if (!isEntrada(p.getX(),p.getY())) {
+            for (Prateleira aux : this.prateleiras.values()) {
+                if ((aux.getCodPal() == p.getCodPalete())) {
+                    aux.setDisponibilidade(1);
+                    aux.setCodPalete(-1);
+                    prateleiras.put(aux.getCodPrateleira(),aux);
                 }
             }
         }
     }
 
+    public boolean isEntrada(int x,int y){
+        return x == 0 && y == 0;
+    }
+
+    public boolean isSaida(int x, int y){
+        return x == 0 && y == 1;
+    }
+
     /**
      * Método que notifica quando uma determinda palete é entregue numa determinada localização pelo robot
      * @param p
-     * @param l
+     * @param x
      * @return Palete
      */
-    public Palete notificaEntrega(Palete p,Localizacao l) {
+    public Palete notificaEntrega(Palete p,int x, int y) {
         p.setTransporte(-1);
-        Palete palete = p.clone();
+        Palete palete = p.clone(); // Para o printf
         this.robot.setEntregue(0);
-        System.out.println(this.robot.getEntregue());
-        if(p.getLocalizacao().equals(l));
-        else if (l.isSaida()){
-            this.paletes.remove(p.getCodPalete());
-            this.robot.setaTranpos(new Palete());
-            this.robot.setLocalizacaoFinal(new Localizacao());
-            palete.setLocalizacao(l);
+        this.robot.setxRobot(x);
+        this.robot.setyRobot(y);
+        this.robot.setLocalizacaoXFinal(-1);
+        this.robot.setLocalizacaoYFinal(-1);
+        this.robot.setaTranpos(new Palete());
+        if(p.getX() == x && p.getY() == y);
+        else if (isSaida(x,y)){
+            palete.setX(x);
+            palete.setY(y);
+            this.paletes.remove(palete.getCodPalete());
+            historico.put(palete.getCodPalete(),palete);
         }
         else{
-            for(Map.Entry<Integer,Prateleira> aux: this.prateleiras.entrySet()) {
-                if (aux.getValue().getLocal().equals(l)) {
-                    aux.getValue().setDisponibilidade(false);
-                    this.robot.setLocalizacao(l);
-                    this.historico.get(p.getCodPalete()).setLocalizacao(l);
-                    this.paletes.get(p.getCodPalete()).setLocalizacao(l);
-                    aux.getValue().setCodPalete(p.getCodPalete());
-                    this.robot.setaTranpos(new Palete());
-                    palete.setLocalizacao(l);
+            for(Prateleira aux: this.prateleiras.values()) {
+                if (aux.getX() == x && aux.getY() == y) {
+                    palete.setX(x);
+                    palete.setY(y);
+                    historico.put(palete.getCodPalete(),palete);
+                    paletes.put(palete.getCodPalete(),palete);
+                    aux.setDisponibilidade(0);
+                    aux.setCodPalete(p.getCodPalete());
+                    prateleiras.put(aux.getCodPrateleira(),aux);
+                    break;
                 }
             }
         }
@@ -336,20 +344,19 @@ public class SistemaFacade implements ISistemaFacade {
      */
     public void comunicaQR(QRcode c){
         int i = historico.size()+1;
-        Localizacao e = new Localizacao (0,0);
-        Palete p = new Palete(i,e,-1,c.getMateriaP());
-        historico.put(p.getCodPalete(),p);
-        paletes.put(p.getCodPalete(),p);
-        Iterator<Prateleira> it = prateleiras.values().iterator();
-        int flag = 0;
-        while(it.hasNext() && flag == 0) {
-            Prateleira prat = it.next();
-            if (prat.isDisponibilidade()){
-                flag = 1;
-                espera.add(new Pair(p.getCodPalete(), prat.getLocal()));
+        Palete p = new Palete(i,0,0,-1,c.getMateriaP());
+        for(Map.Entry<Integer,Prateleira> prat: this.prateleiras.entrySet()) {
+            historico.put(i,p);
+            paletes.put(i,p);
+            if (prat.getValue().isDisponibilidade() == 1) {
+                p.setX(prat.getValue().getX());
+                p.setY(prat.getValue().getY());
+                espera.add(p);
+                break;
             }
         }
     }
+
 
     /**
      * Método que nos diz a ordem de transporte do robot
@@ -357,25 +364,18 @@ public class SistemaFacade implements ISistemaFacade {
      */
     public boolean comunicaOT(){
         boolean flag = false;
-        if(this.robot.hasPalete()) {
-            if (!espera.isEmpty()) {
-                Pair p = this.espera.get(0);
+        if(!this.robot.hasPalete()) {
+            if (espera.size() > 0) {
+                Palete p = this.espera.get(0);
                 this.espera.remove(0);
-                Palete pal = this.paletes.get(p.getX());
+                Palete pal = this.paletes.get(p.getCodPalete());
                 this.robot.setaTranpos(pal);
-                this.robot.setLocalizacaoFinal((Localizacao) p.getY());
-                System.out.println(this.robot);
+                this.robot.setLocalizacaoXFinal(p.getX());
+                this.robot.setLocalizacaoYFinal(p.getY());
             }
             flag = true;
         }
         return flag;
     }
 
-    /**
-     * Método que adiciona uma prateleira
-     * @param p
-     */
-    public void add(Prateleira p){
-        this.prateleiras.put(p.getCodPrateleira(),p);
-    }
 }
