@@ -27,10 +27,10 @@ public class SistemaFacade implements ISistemaFacade {
     public SistemaFacade(){
         rDisp = 0;
         robot = new Robot();
-        paletes = new HashMap<>();
-        historico = new HashMap<>();
-        prateleiras = new HashMap<>();
-        espera = new ArrayList<>();
+        this.historico = HistoricoDAO.getInstance();
+        this.paletes = PaletesDAO.getInstance();
+        this.prateleiras = PrateleirasDAO.getInstance();
+        this.espera = EsperaDAO.getInstance();
         gestor = new Gestor();
         leitor = new Leitor();
     }
