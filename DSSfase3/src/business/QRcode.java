@@ -18,8 +18,8 @@ public class QRcode {
 
     /**
      * Construtor parametrizado
-     * @param materiaP
-     * @param cod
+     * @param materiaP Material da palete
+     * @param cod Código da palete
      */
     public QRcode(String materiaP, int cod) {
         this.materiaP = materiaP;
@@ -28,7 +28,7 @@ public class QRcode {
 
     /**
      * Construtor por cópia
-     * @param lei
+     * @param lei QrCode
      */
     public QRcode(QRcode lei){
         materiaP = lei.getMateriaP();
@@ -45,7 +45,7 @@ public class QRcode {
 
     /**
      * Define o material da palete
-     * @param materiaP
+     * @param materiaP Material da palete
      */
     public void setMateriaP(String materiaP) {
         this.materiaP = materiaP;
@@ -61,7 +61,7 @@ public class QRcode {
 
     /**
      * Define o código da palete
-     * @param cod
+     * @param cod Código da palete
      */
     public void setCod(int cod) {
         this.cod = cod;

@@ -42,7 +42,9 @@ public class Menu {
         } while (this.op == -1);
     }
 
-    /** Apresentar o menu */
+    /**
+     * Apresentar o menu
+     */
     private void showMenu() {
         System.out.println("\n *** Menu *** ");
         for (int i=0; i<this.opcoes.size(); i++) {
@@ -54,11 +56,17 @@ public class Menu {
     }
 
 
+    /**
+     * Executar P
+     */
     public void executaP() {
         showMenuPrincipal();
         this.op = lerOpcaoP();
     }
 
+    /**
+     * Mostra o Menu Principal
+     */
     private void showMenuPrincipal() {
         System.out.println("\n ** B e m   V i n d o  **  C h i n a   T o w n **");
         System.out.println("\n *** Menu *** ");
@@ -69,6 +77,10 @@ public class Menu {
         System.out.println("5 - Sair");
     }
 
+    /**
+     * Ler a Opção P
+     * @return int
+     */
     private int lerOpcaoP() {
         int op;
         //Scanner is = new Scanner(System.in);
@@ -88,7 +100,10 @@ public class Menu {
         return op;
     }
 
-    /** Ler uma opção válida */
+    /**
+     * Ler uma opção válida
+     * @return int
+     */
     private int lerOpcao() {
         int op;
         //Scanner is = new Scanner(System.in);

@@ -55,6 +55,9 @@ public class TextUI {
         scin = new Scanner(System.in);
     }
 
+    /**
+     * Funcionamento das várias opções
+     */
     public void run(){
         do{
             menu.executaP();
@@ -77,6 +80,10 @@ public class TextUI {
     }
 
     // -------------------------------- GESTOR -------------------------------------------
+
+    /**
+     * Mostra o menu do Gestor
+     */
     public void menuGestor() {
         String[] opcoes = {
                 "Consultar lista de localizações"};
@@ -84,6 +91,9 @@ public class TextUI {
     }
 
 
+    /**
+     * Funcionamento do menu Gestor
+     */
     public void runGestor() {
         do {
             menuGestor();
@@ -100,12 +110,18 @@ public class TextUI {
 
     // -------------------------------- Leitor -------------------------------------------
 
+    /**
+     * Mostra o menu do Leitor
+     */
     public void menuLeitor() {
         String[] opcoes = {
                 "Comunicar código QR"};
         this.menu = new Menu(opcoes);
     }
 
+    /**
+     * Funcionamento do menu Leitor
+     */
     public void runLeitor() {
         do {
             menuLeitor();
@@ -120,6 +136,9 @@ public class TextUI {
         TextUI();
     }
 
+    /**
+     * Mostra a lista de localizações das paletes
+     */
     public void trataListaLocalizacoes(){
         System.out.println("** Lista de localizacoes de paletes **\n");
         Map<Integer, Map.Entry<Integer,Integer>> p = this.model.consultalistagemdeLocalizacao();
@@ -127,6 +146,9 @@ public class TextUI {
             System.out.println("A palete numero " + aux.getKey() + " esta em x = " + aux.getValue().getKey() + ", y = " + aux.getValue().getKey());
     }
 
+    /**
+     * Mostra a palete a partir da sua materia prima
+     */
     public void trataDoQR(){
         Leitor l = this.model.getLeitor();
         System.out.println("Insira matéria prima: ");
@@ -141,6 +163,9 @@ public class TextUI {
 
     // -------------------------------- Robot -------------------------------------------
 
+    /**
+     * Mostra o menu Robot
+     */
     public void menuRobot() {
         String[] opcoes = {
                 "Notificar recolha",
@@ -148,6 +173,9 @@ public class TextUI {
         this.menu = new Menu(opcoes);
     }
 
+    /**
+     * Funcionamento do menu Robot
+     */
     public void runRobot() {
         do {
             menuRobot();
@@ -165,6 +193,9 @@ public class TextUI {
         TextUI();
     }
 
+    /**
+     * Informa da recolha efetuada pelo robot
+     */
     public void trataDaRecolha(){
         Robot r = this.model.getRobot(1);
         if (r.getaTranpos()!=-1) {
@@ -175,6 +206,9 @@ public class TextUI {
             System.out.println("\nNada a recolher!");
     }
 
+    /**
+     * Informa da entrega efetuada pelo robot
+     */
     public void trataDaEntrega() {
         Robot r = this.model.getRobot(1);
         Palete palete = this.model.getPaletes(r.getaTranpos());
@@ -187,13 +221,19 @@ public class TextUI {
     }
 
     // -------------------------------- SISTEMA -------------------------------------------
+
+    /**
+     * Mostra o menu Sistema
+     */
     public void menuSistema() {
         String[] opcoes = {
                 "Ordem de trasnporte"};
         this.menu = new Menu(opcoes);
     }
 
-
+    /**
+     * Funcionamento do menu Sistema
+     */
     public void runSistema() {
         do {
             menuSistema();
@@ -208,6 +248,9 @@ public class TextUI {
         TextUI();
     }
 
+    /**
+     * Informa da Ordem de Transporte, ou seja, se o robot está ocupado ou não
+     */
     public void trataOrdemTransporte(){
         if(this.model.getEspera().size() > 0) {
             boolean flag;

@@ -7,7 +7,7 @@ import java.util.Objects;
  */
 public class Prateleira {
     private int codPrateleira;
-    private int disponibilidade; // 0 -false ; 1 - true
+    private int disponibilidade;
     private int codPalete;
     private int x;
     private int y;
@@ -15,10 +15,11 @@ public class Prateleira {
 
     /**
      * Construtor parametrizado
-     * @param codPrateleira
-     * @param disponibilidade
-     * @param codPal
-     * @param local
+     * @param codPrateleira Código da prateleira
+     * @param disponibilidade Disponibilidade
+     * @param codPal Código da palete
+     * @param x abcissa
+     * @param y ordenada
      */
     public Prateleira(int codPrateleira, int disponibilidade, int codPal, int x, int y) {
         this.codPalete = codPal;
@@ -41,7 +42,7 @@ public class Prateleira {
 
     /**
      * Construtor por cópia
-     * @param prat
+     * @param prat Prateleira
      */
     public Prateleira(Prateleira prat){
         codPalete = prat.getCodPal();
@@ -53,7 +54,7 @@ public class Prateleira {
 
     /**
      * Devolve  o código da palete
-     * @return
+     * @return int
      */
     public int getCodPal(){
         return codPalete;
@@ -61,24 +62,40 @@ public class Prateleira {
 
     /**
      * Define o código da palete
-     * @param codPalete
+     * @param codPalete Código da palete
      */
     public void setCodPalete(int codPalete) {
         this.codPalete = codPalete;
     }
 
+    /**
+     * Devolve o X
+     * @return int
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * Define o X
+     * @param x abcissa
+     */
     public void setX(int x) {
         this.x = x;
     }
 
+    /**
+     * Devolve o Y
+     * @return int
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * Define o Y
+     * @param y ordenada
+     */
     public void setY(int y) {
         this.y = y;
     }
@@ -93,7 +110,7 @@ public class Prateleira {
 
     /**
      * Define a disponibiliadade
-     * @param disponibilidade
+     * @param disponibilidade Disponibilidade
      */
     public void setDisponibilidade(int disponibilidade) {
         this.disponibilidade = disponibilidade;
@@ -109,14 +126,18 @@ public class Prateleira {
 
     /**
      * Define  o código da prateleira
-     * @param codPrateleira
+     * @param codPrateleira Código da prateleira
      */
     public void setCodPrateleira(int codPrateleira) {
         this.codPrateleira = codPrateleira;
     }
 
 
-    @Override
+    /**
+     * Verifica a igualdade com outro objeto.
+     * @param o Objeto a comparar
+     * @return boolean
+     */
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Prateleira)) return false;
@@ -128,7 +149,10 @@ public class Prateleira {
                 getY() == that.getY();
     }
 
-    @Override
+    /**
+     * Método hashCode do objeto
+     * @return hash do objeto
+     */
     public int hashCode() {
         return Objects.hash(getCodPrateleira(), isDisponibilidade(), codPalete, getX(), getY());
     }
@@ -143,14 +167,17 @@ public class Prateleira {
 
     /**
      * Método que compara o código de duas paletes
-     * @param p
+     * @param p Palete
      * @return boolean
      */
     public boolean compara(Palete p){
         return (p.getCodPalete() == this.codPalete);
     }
 
-    @Override
+    /**
+     * Método toString do objeto
+     * @return Objeto em modo string
+     */
     public String toString() {
         final StringBuilder sb = new StringBuilder("Prateleira{");
         sb.append("codPrateleira=").append(codPrateleira);

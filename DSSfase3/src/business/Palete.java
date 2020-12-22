@@ -14,6 +14,14 @@ public class Palete {
     private String materiaP;
 
 
+    /**
+     * Construtor parametrizado
+     * @param codPalete Código da palete
+     * @param x abcissa
+     * @param y ordenada
+     * @param robot Robot
+     * @param materiaP Material da palete
+     */
     public Palete(int codPalete, int x, int y, int robot, String materiaP) {
         this.codPalete = codPalete;
         this.x = x;
@@ -35,7 +43,7 @@ public class Palete {
 
     /**
      * Construtor por cópia
-     * @param pal
+     * @param pal Palete
      */
     public Palete(Palete pal){
         codPalete = pal.getCodPalete();
@@ -55,31 +63,47 @@ public class Palete {
 
     /**
      * Define o código da palete
-     * @param codPalete
+     * @param codPalete Código da palete
      */
     public void setCodPalete(int codPalete) {
         this.codPalete = codPalete;
     }
 
+    /**
+     * Dveolve o X
+     * @return int
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * Define o X
+     * @param x abcissa
+     */
     public void setX(int x) {
         this.x = x;
     }
 
+    /**
+     * Devolve o Y
+     * @return int
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * Define o Y
+     * @param y ordenada
+     */
     public void setY(int y) {
         this.y = y;
     }
 
     /**
      * Método que nos diz qual robot transporta a palete
-     * @return
+     * @return int
      */
     public int isTransporte() {
         return robot;
@@ -87,7 +111,7 @@ public class Palete {
 
     /**
      * Método que altera o robot responsável pelo transporte da palete
-     * @param robot
+     * @param robot Robot atual
      */
     public void setTransporte(int robot) {
         this.robot = robot;
@@ -104,14 +128,18 @@ public class Palete {
 
     /**
      * Define o material da palete
-     * @param materiaP
+     * @param materiaP Material da palete
      */
     public void setMateriaP(String materiaP) {
         this.materiaP = materiaP;
     }
 
 
-    @Override
+    /**
+     * Verifica a igualdade com outro objeto.
+     * @param o Objeto a comparar
+     * @return boolean
+     */
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Palete)) return false;
@@ -123,7 +151,10 @@ public class Palete {
                 Objects.equals(getMateriaP(), palete.getMateriaP());
     }
 
-    @Override
+    /**
+     * Método hashCode do objeto
+     * @return hash do objeto
+     */
     public int hashCode() {
         return Objects.hash(getCodPalete(), getX(), getY(), robot, getMateriaP());
     }
@@ -140,7 +171,6 @@ public class Palete {
      * Método toString do objeto
      * @return Objeto em modo string
      */
-    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("Palete{");
         sb.append("codPalete=").append(codPalete);

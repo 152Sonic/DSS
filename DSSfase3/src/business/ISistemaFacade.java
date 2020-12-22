@@ -3,6 +3,9 @@ package business;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Interface Sistema
+ */
 public interface ISistemaFacade {
     boolean comunicaOT();
     void comunicaQR(QRcode c);

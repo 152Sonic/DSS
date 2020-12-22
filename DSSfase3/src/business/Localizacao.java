@@ -19,8 +19,8 @@ public class Localizacao {
 
     /**
      * Construtor parametrizado
-     * @param x
-     * @param y
+     * @param x abcissa
+     * @param y ordenada
      */
     public Localizacao(int x, int y) {
         this.x = x;
@@ -29,7 +29,7 @@ public class Localizacao {
 
     /**
      * Construtor por cópia
-     * @param local
+     * @param local localização
      */
     public Localizacao(Localizacao local){
         x = local.getX();
@@ -62,7 +62,7 @@ public class Localizacao {
 
     /**
      * Define o Y
-     * @param y
+     * @param y ordenada
      */
     public void setY(int y) {
         this.y = y;

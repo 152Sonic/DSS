@@ -20,8 +20,8 @@ public class  Leitor {
 
     /**
      * Construtor parametrizado
-     * @param info
-     * @param qr
+     * @param info Informação
+     * @param qr QrCode
      */
     public Leitor(String info,QRcode qr) {
         this.qrcode = qr;
@@ -30,7 +30,7 @@ public class  Leitor {
 
     /**
      * Construtor por cópia
-     * @param lei
+     * @param lei Leitor
      */
     public Leitor(Leitor lei){
         qrcode = lei.getQrcode();
@@ -47,7 +47,7 @@ public class  Leitor {
 
     /**
      * Define o QrCode
-     * @param qrcode
+     * @param qrcode QrCode
      */
     public void setQrcode(QRcode qrcode) {
         this.qrcode = qrcode;
@@ -63,7 +63,7 @@ public class  Leitor {
 
     /**
      * Define a info
-     * @param info
+     * @param info Informação
      */
     public void setInfo(String info) {
         this.info = info;

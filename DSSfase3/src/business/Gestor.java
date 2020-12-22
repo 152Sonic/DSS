@@ -20,8 +20,8 @@ public class Gestor {
 
     /**
      * Construtor parametrizado
-     * @param nome
-     * @param pass
+     * @param nome Nome do Gestor
+     * @param pass Passe
      */
     public Gestor(String nome, String pass) {
         nome = nome;
@@ -30,7 +30,7 @@ public class Gestor {
 
     /**
      * Construtor por cópia
-     * @param ges
+     * @param ges Gestor
      */
     public Gestor(Gestor ges){
         nome = ges.getNome();
@@ -47,7 +47,7 @@ public class Gestor {
 
     /**
      * Define o nome
-     * @param nome
+     * @param nome Nome
      */
     public void setNome(String nome) {
         nome = nome;
@@ -63,7 +63,7 @@ public class Gestor {
 
     /**
      * Define a passe
-     * @param pass
+     * @param pass Passe
      */
     public void setPass(String pass) {
         this.pass = pass;

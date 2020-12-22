@@ -19,8 +19,8 @@ public class Pair {
 
     /**
      * Construtor parametrizado
-     * @param i
-     * @param l
+     * @param i abcissa
+     * @param l Localização
      */
     public Pair(int i, Localizacao l){
         x = i;
@@ -29,7 +29,7 @@ public class Pair {
 
     /**
      * Construtor por cópia
-     * @param p
+     * @param p Par
      */
     public Pair(Pair p){
         x = p.getX();
@@ -46,7 +46,7 @@ public class Pair {
 
     /**
      * Define o X
-     * @param x
+     * @param x abcissa
      */
     public void setX(int x) {
         this.x = x;
@@ -62,7 +62,7 @@ public class Pair {
 
     /**
      * Define o Y
-     * @param y
+     * @param y Localização
      */
     public void setY(Localizacao y) {
         this.y = y;

@@ -36,14 +36,14 @@ public class SistemaFacade implements ISistemaFacade {
 
     /**
      * Construtor parametrizado
-     * @param rDisp
-     * @param robot
-     * @param paletes
-     * @param historico
-     * @param prateleiras
-     * @param espera
-     * @param gestor
-     * @param l
+     * @param rDisp Robot disponível
+     * @param robot Conjunto de Robots
+     * @param paletes Conjunto de Paletes
+     * @param historico Histórico
+     * @param prateleiras Conjunto de Pratelerias
+     * @param espera Lista de espera com paletes
+     * @param gestor Gestor
+     * @param l Leitor
      */
     public SistemaFacade(int rDisp, Map<Integer,Robot> robot, Map<Integer,Palete> paletes, Map<Integer,Palete> historico,
                          Map<Integer,Prateleira> prateleiras, List<Palete> espera, Gestor gestor, Leitor l,Palete p){
@@ -60,7 +60,7 @@ public class SistemaFacade implements ISistemaFacade {
 
     /**
      * Construtor por cópia
-     * @param system
+     * @param system Sistema
      */
     public SistemaFacade(SistemaFacade system){
         rDisp = system.getrDisp();
@@ -74,10 +74,18 @@ public class SistemaFacade implements ISistemaFacade {
         p = system.getP();
     }
 
+    /**
+     * Devolve palete
+     * @return Palete
+     */
     public Palete getP() {
         return p;
     }
 
+    /**
+     * Define palete
+     * @param p Palete
+     */
     public void setP(Palete p) {
         this.p = p;
     }
@@ -92,7 +100,7 @@ public class SistemaFacade implements ISistemaFacade {
 
     /**
      * Define o leitor
-     * @param leitor
+     * @param leitor Leitor
      */
     public void setLeitor(Leitor leitor) {
         this.leitor = leitor;
@@ -109,7 +117,7 @@ public class SistemaFacade implements ISistemaFacade {
 
     /**
      * Define a lista de espera
-     * @param espera
+     * @param espera Lista de espera
      */
     public void setEspera(List<Palete> espera) {
         this.espera = new ArrayList<>();
@@ -119,7 +127,7 @@ public class SistemaFacade implements ISistemaFacade {
 
     /**
      * Define o conjunto de prateleiras
-     * @param prateleiras
+     * @param prateleiras Prateleiras
      */
     public void setPrateleiras(Map<Integer, Prateleira> prateleiras) {
         this.prateleiras = new HashMap<>();
@@ -130,7 +138,7 @@ public class SistemaFacade implements ISistemaFacade {
 
     /**
      * Define o conjunto de paletes no histórico
-     * @param paletes
+     * @param paletes Paletes
      */
     public void setHistorico(Map<Integer, Palete> paletes) {
         this.historico = new HashMap<>();
@@ -177,7 +185,7 @@ public class SistemaFacade implements ISistemaFacade {
 
     /**
      * Define o conjunto de paletes
-     * @param paletes
+     * @param paletes Paletes
      */
     public void setPaletes(Map<Integer, Palete> paletes) {
         this.paletes = new HashMap<>();
@@ -196,7 +204,7 @@ public class SistemaFacade implements ISistemaFacade {
 
     /**
      * Define o gestor
-     * @param gestor
+     * @param gestor Gestor
      */
     public void setGestor(Gestor gestor) {
         this.gestor = gestor;
@@ -212,7 +220,7 @@ public class SistemaFacade implements ISistemaFacade {
 
     /**
      * Define o robot disponível
-     * @param rDisp
+     * @param rDisp Robot disponível
      */
     public void setrDisp(int rDisp) {
         this.rDisp = rDisp;
@@ -230,10 +238,20 @@ public class SistemaFacade implements ISistemaFacade {
         return aux;
     }
 
+    /**
+     * Devolve um Robot
+     * @param c Código do Robot
+     * @return Robot
+     */
     public Robot getRobot(int c){
         return this.robot.get(c);
     }
 
+    /**
+     * Devolve uma palete
+     * @param c Código de palete
+     * @return Palete
+     */
     public Palete getPaletes(int c){
         return this.paletes.get(c);
     }
@@ -242,7 +260,7 @@ public class SistemaFacade implements ISistemaFacade {
 
     /**
      * Define o robot
-     * @param robot
+     * @param robot Robot
      */
     public void setRobot(Map<Integer,Robot> robot) {
         this.robot = new HashMap<>();
@@ -299,8 +317,8 @@ public class SistemaFacade implements ISistemaFacade {
     }
 
     /**
-     * Método que notifica quando uma determinada palete é recolhida de uma prateleira pelo robot
-     * @param c
+     * Método que notifica quando uma determinada palete é recolhida pelo robot
+     * @param c Código de palete
      */
     // função implementada para apenas um robot
     public void notificaRecolha(int c){
@@ -331,18 +349,31 @@ public class SistemaFacade implements ISistemaFacade {
         }
     }
 
+    /**
+     * Método que nos diz se se encontra na entrada
+     * @param x abcissa
+     * @param y ordenada
+     * @return boolean
+     */
     public boolean isEntrada(int x,int y){
         return x == 0 && y == 0;
     }
 
+    /**
+     * Método que nos diz se se encontra na saída
+     * @param x abcissa
+     * @param y ordenada
+     * @return boolean
+     */
     public boolean isSaida(int x, int y){
         return x == 0 && y == 1;
     }
 
     /**
      * Método que notifica quando uma determinda palete é entregue numa determinada localização pelo robot
-     * @param p
-     * @param x
+     * @param p Palete a ser entregue
+     * @param x abcissa final
+     * @param y ordenada final
      * @return Palete
      */
     public Palete notificaEntrega(Palete p,int x, int y) {
@@ -375,7 +406,7 @@ public class SistemaFacade implements ISistemaFacade {
 
     /**
      * Método que regista o código QR
-     * @param c
+     * @param c QrCode
      */
     public void comunicaQR(QRcode c){
         int i = historico.size()+1;
