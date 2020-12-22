@@ -166,34 +166,24 @@ public class TextUI {
     }
 
     public void trataDaRecolha(){
-        Robot r = this.model.getRobot();
-        if(r.getEntregue() == 0) {
-            if ((!r.getaTranpos().isEmpty())) {
-                this.model.notificaRecolha(r.getaTranpos());
-                System.out.println("\nRecolha da palete numero " + r.getaTranpos() + " efetuada!");
-            } else
-                System.out.println("\nNada a recolher!");
+        Robot r = this.model.getRobot(1);
+        if (r.getaTranpos()!=-1) {
+            this.model.notificaRecolha(r.getaTranpos());
+            System.out.println("\nRecolha da palete numero " + r.getaTranpos() + " efetuada!");
         }
-        else{
-            System.out.println("Robot ainda não efetuou entrega.");
-        }
+        else
+            System.out.println("\nNada a recolher!");
     }
 
     public void trataDaEntrega() {
-        Robot r = this.model.getRobot();
-        if (r.getEntregue() == 1){
-            if ((!(r.getaTranpos().getX() == r.getLocalizacaoXFinal() && r.getaTranpos().getY() == r.getLocalizacaoYFinal()))) {
-                Palete p = this.model.notificaEntrega(r.getaTranpos(), r.getLocalizacaoXFinal(),r.getLocalizacaoYFinal());
-                System.out.println("\nEntrega da palete numero " + p.toString() + " efetuada!");
-            }
-            else
-                System.out.println("\n Palete encontra-se já no destino!");
+        Robot r = this.model.getRobot(1);
+        Palete palete = this.model.getPaletes(r.getaTranpos());
+        if ((!(r.getxRobot() == r.getLocalizacaoXFinal() &&  r.getyRobot() == r.getLocalizacaoYFinal()))) {
+            Palete pal = this.model.notificaEntrega(palete, r.getLocalizacaoXFinal(),r.getLocalizacaoYFinal());
+            System.out.println("\nEntrega da palete numero " + pal.toString() + " efetuada!");
         }
-        else {
-            System.out.println("\n Robot ainda não efetuou recolha!");
-        }
-
-
+        else
+            System.out.println("\n Palete encontra-se já no destino!");
     }
 
     // -------------------------------- SISTEMA -------------------------------------------

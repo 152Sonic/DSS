@@ -1,4 +1,9 @@
 package business;
+import data.DAOconfig;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.Statement;
 import java.util.Objects;
 import java.lang.Object;
 
@@ -10,13 +15,13 @@ public class Robot {
     private int codRobot;
     private int xRobot;
     private int yRobot;
-    private Palete aTranpos;
+    private int aTranpos;
     private int localizacaoXFinal;
     private int localizacaoYFinal;
     private int entregue;
 
 
-    public Robot(int codRobot, int xr, int yr,Palete aTranspos,int xf, int yf,int entregue) {
+    public Robot(int codRobot, int xr, int yr,int aTranspos,int xf, int yf,int entregue) {
         this.codRobot = codRobot;
         this.xRobot = xr;
         this.yRobot = yr;
@@ -33,7 +38,7 @@ public class Robot {
         codRobot = 1;
         xRobot = 0;
         yRobot = 0;
-        aTranpos = new Palete();
+        aTranpos = -1;
         localizacaoXFinal = -1;
         localizacaoYFinal = -1;
         entregue = 0;
@@ -70,18 +75,18 @@ public class Robot {
     }
 
     /**
-     * Devolve a palete a transportar
+     * Devolve o  codigo da palete a transportar
      * @return palete
      */
-    public Palete getaTranpos() {
+    public int getaTranpos() {
         return aTranpos;
     }
 
     /**
-     * Define a palete a transportar
+     * Define o codigo da palete a transportar
      * @param aTranpos
      */
-    public void setaTranpos(Palete aTranpos) {
+    public void setaTranpos(int aTranpos) {
         this.aTranpos = aTranpos;
     }
 
@@ -181,6 +186,7 @@ public class Robot {
      */
     //Se tiver palete dá true
     public boolean hasPalete(){
-        return aTranpos.getCodPalete() != -1;
+        return aTranpos != -1;
     }
+
 }

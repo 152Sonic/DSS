@@ -1,9 +1,6 @@
 package business;
 
-import data.EsperaDAO;
-import data.HistoricoDAO;
-import data.PaletesDAO;
-import data.PrateleirasDAO;
+import data.*;
 
 import java.util.*;
 
@@ -12,13 +9,14 @@ import java.util.*;
  */
 public class SistemaFacade implements ISistemaFacade {
     private int rDisp;
-    private Robot robot;
+    private Map<Integer,Robot> robot;
     private Map<Integer,Palete> paletes;
     private Map<Integer,Palete> historico;
     private Map<Integer,Prateleira> prateleiras;
     private List<Palete> espera;
     private Gestor gestor;
     private Leitor leitor;
+    private Palete p; //palete por recolher - Implementado apenas para um  robot
 
 
     /**
@@ -26,13 +24,14 @@ public class SistemaFacade implements ISistemaFacade {
      */
     public SistemaFacade(){
         rDisp = 0;
-        robot = new Robot();
+        this.robot = RobotDAO.getInstance();
         this.historico = HistoricoDAO.getInstance();
         this.paletes = PaletesDAO.getInstance();
         this.prateleiras = PrateleirasDAO.getInstance();
         this.espera = EsperaDAO.getInstance();
         gestor = new Gestor();
         leitor = new Leitor();
+        p = new Palete();
     }
 
     /**
@@ -46,16 +45,17 @@ public class SistemaFacade implements ISistemaFacade {
      * @param gestor
      * @param l
      */
-    public SistemaFacade(int rDisp, Robot robot, Map<Integer,Palete> paletes, Map<Integer,Palete> historico,
-                         Map<Integer,Prateleira> prateleiras, List<Palete> espera, Gestor gestor, Leitor l){
+    public SistemaFacade(int rDisp, Map<Integer,Robot> robot, Map<Integer,Palete> paletes, Map<Integer,Palete> historico,
+                         Map<Integer,Prateleira> prateleiras, List<Palete> espera, Gestor gestor, Leitor l,Palete p){
         this.rDisp = rDisp;
-        this.robot = robot;
+        setRobot(robot);
         setHistorico(historico);
         setPaletes(paletes);
         setPrateleiras(prateleiras);
         setEspera(espera);
         this.gestor = gestor;
         this.leitor = l;
+        this.p = p;
     }
 
     /**
@@ -64,13 +64,22 @@ public class SistemaFacade implements ISistemaFacade {
      */
     public SistemaFacade(SistemaFacade system){
         rDisp = system.getrDisp();
-        robot = system.getRobot();
+        setRobot(system.getRobot());
         setEspera(system.getEspera());
         setHistorico(system.getHistorico());
         setPaletes(system.getPaletes());
         setPrateleiras(system.getPrateleiras());
         gestor = system.getGestor();
         leitor = system.getLeitor();
+        p = system.getP();
+    }
+
+    public Palete getP() {
+        return p;
+    }
+
+    public void setP(Palete p) {
+        this.p = p;
     }
 
     /**
@@ -213,16 +222,33 @@ public class SistemaFacade implements ISistemaFacade {
      * Devolve o robot
      * @return Robot
      */
-    public Robot getRobot() {
-        return robot;
+    public Map<Integer,Robot> getRobot() {
+        Map<Integer, Robot> aux = new HashMap<>();
+        for(Robot n: robot.values()){
+            aux.put(n.getCodRobot(), n);
+        }
+        return aux;
     }
+
+    public Robot getRobot(int c){
+        return this.robot.get(c);
+    }
+
+    public Palete getPaletes(int c){
+        return this.paletes.get(c);
+    }
+
+
 
     /**
      * Define o robot
      * @param robot
      */
-    public void setRobot(Robot robot) {
-        this.robot = robot;
+    public void setRobot(Map<Integer,Robot> robot) {
+        this.robot = new HashMap<>();
+        for(Robot n: robot.values()){
+            this.robot.put(n.getCodRobot(), n);
+        }
     }
 
     /**
@@ -274,19 +300,33 @@ public class SistemaFacade implements ISistemaFacade {
 
     /**
      * Método que notifica quando uma determinada palete é recolhida de uma prateleira pelo robot
-     * @param p
+     * @param c
      */
     // função implementada para apenas um robot
-    public void notificaRecolha(Palete p){
-        p.setTransporte(robot.getCodRobot());
-        this.robot.setEntregue(1);
-        if (!isEntrada(p.getX(),p.getY())) {
-            for (Prateleira aux : this.prateleiras.values()) {
-                if ((aux.getCodPal() == p.getCodPalete())) {
-                    aux.setDisponibilidade(1);
-                    aux.setCodPalete(-1);
-                    prateleiras.put(aux.getCodPrateleira(),aux);
+    public void notificaRecolha(int c){
+        Palete p = this.paletes.get(c);
+        for(Robot r : this.robot.values()) {
+            if(r.getaTranpos() == c) {
+                //this.p.setTransporte(r.getCodRobot());
+                p.setTransporte(r.getCodRobot());
+                r.setEntregue(1);
+                this.robot.put(r.getCodRobot(),r);
+                if (!isEntrada(p.getX(), p.getY())) {
+                    for (Prateleira aux : this.prateleiras.values()) {
+                        if ((aux.getCodPal() == p.getCodPalete())) {
+                            aux.setDisponibilidade(1);
+                            aux.setCodPalete(-1);
+                            prateleiras.put(aux.getCodPrateleira(), aux);
+                            r.setxRobot(aux.getX());
+                            r.setyRobot(aux.getY());
+                            r.setLocalizacaoXFinal(this.espera.get(0).getX());
+                            r.setLocalizacaoYFinal(this.espera.get(0).getY());
+                            this.espera.remove(0);
+                            this.robot.put(r.getCodRobot(),r);
+                        }
+                    }
                 }
+                break;
             }
         }
     }
@@ -306,16 +346,11 @@ public class SistemaFacade implements ISistemaFacade {
      * @return Palete
      */
     public Palete notificaEntrega(Palete p,int x, int y) {
+        Robot r = new Robot(1,x,y,-1,-1,-1,0);
+        this.robot.put(r.getCodRobot(),r);
         p.setTransporte(-1);
         Palete palete = p.clone(); // Para o printf
-        this.robot.setEntregue(0);
-        this.robot.setxRobot(x);
-        this.robot.setyRobot(y);
-        this.robot.setLocalizacaoXFinal(-1);
-        this.robot.setLocalizacaoYFinal(-1);
-        this.robot.setaTranpos(new Palete());
-        if(p.getX() == x && p.getY() == y);
-        else if (isSaida(x,y)){
+        if (isSaida(x,y)){
             palete.setX(x);
             palete.setY(y);
             this.paletes.remove(palete.getCodPalete());
@@ -362,18 +397,24 @@ public class SistemaFacade implements ISistemaFacade {
      * Método que nos diz a ordem de transporte do robot
      * @return boolean
      */
-    public boolean comunicaOT(){
+    public boolean comunicaOT() {
         boolean flag = false;
-        if(!this.robot.hasPalete()) {
-            if (espera.size() > 0) {
-                Palete p = this.espera.get(0);
-                this.espera.remove(0);
-                Palete pal = this.paletes.get(p.getCodPalete());
-                this.robot.setaTranpos(pal);
-                this.robot.setLocalizacaoXFinal(p.getX());
-                this.robot.setLocalizacaoYFinal(p.getY());
+        for (Robot r : this.robot.values()) {
+            if (!r.hasPalete()) {
+                if (espera.size() > 0) {
+                    Palete p = this.espera.get(0);
+                    //setP(p);
+
+                    Palete pal = this.paletes.get(p.getCodPalete());
+                    Robot ro = r.clone();
+                    ro.setaTranpos(pal.getCodPalete());
+                    ro.setxRobot(p.getX());
+                    ro.setyRobot(p.getY());
+                    this.robot.put(ro.getCodRobot(),ro);
+                }
+                flag = true;
+                break;
             }
-            flag = true;
         }
         return flag;
     }
