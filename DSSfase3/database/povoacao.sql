@@ -1,5 +1,11 @@
 use dss;
 
+insert into Robot
+	(codRobot,xRobot,yRobot,aTransp,localizacaoXRobot,localizacaoYRobot,entregue)
+    values
+		(1,0,0,-1,-1,-1,0)
+	;
+
 insert into paletes
 	(codPaletes,x,y,transporte,materialP)
     values
