@@ -27,8 +27,12 @@ public class PaletesDAO implements Map<Integer,Palete> {
         }
     }
 
-    //NEcessitamos do put, entryset, remove, get
 
+    /**
+     * Implementação do Singleton
+     *
+     * @return instância única desta classe
+     */
     public static PaletesDAO getInstance() {
         if (PaletesDAO.singleton == null) {
             PaletesDAO.singleton = new PaletesDAO();
@@ -36,6 +40,11 @@ public class PaletesDAO implements Map<Integer,Palete> {
         return PaletesDAO.singleton;
     }
 
+    /**
+     * Método que remove uma palete, dado o seu código
+     * @param key Código da palete a remover
+     * @return a palete removida
+     */
     public Palete remove(Object key) {
         Palete t = this.get(key);
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -49,6 +58,11 @@ public class PaletesDAO implements Map<Integer,Palete> {
         return t;
     }
 
+    /**
+     * Obtem-se uma palete, dado o seu código
+     * @param key Código da palete
+     * @return Palete
+     */
     public Palete get(Object key) {
         Palete a = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -66,6 +80,10 @@ public class PaletesDAO implements Map<Integer,Palete> {
         return a;
     }
 
+    /**
+     * Método que devolve um conjunto de pares com palete e o respetivo código
+     * @return Conjunto com palete e o seu código
+     */
     public Set<Entry<Integer, Palete>> entrySet() {
         Set<Entry<Integer,Palete>> r = new HashSet<>();
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -82,6 +100,12 @@ public class PaletesDAO implements Map<Integer,Palete> {
         return r;
     }
 
+    /**
+     * Método que insere uma palete na base de dados
+     * @param key Código da palete
+     * @param a Palete
+     * @return Palete
+     */
     public Palete put(Integer key, Palete a) {
         Palete res = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -98,13 +122,17 @@ public class PaletesDAO implements Map<Integer,Palete> {
         return res;
     }
 
+
+
     public boolean remove(Object key, Object value) {
         return false;
     }
 
+
     public boolean containsKey(Object key) {
         return false;
     }
+
 
     public boolean containsValue(Object value) {
         return false;
@@ -115,9 +143,11 @@ public class PaletesDAO implements Map<Integer,Palete> {
         return 0;
     }
 
+
     public boolean isEmpty() {
         return this.size() == 0;
     }
+
 
     public void putAll(Map<? extends Integer, ? extends Palete> m) {
 
@@ -127,10 +157,16 @@ public class PaletesDAO implements Map<Integer,Palete> {
 
     }
 
+
     public Set<Integer> keySet() {
         return null;
     }
 
+
+    /**
+     * Devolve todas as paletes da base de dados
+     * @return Collection<Palete>
+     */
     public Collection<Palete> values() {
         Collection<Palete> res = new HashSet<>();
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);

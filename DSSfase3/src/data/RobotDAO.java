@@ -31,6 +31,11 @@ public class RobotDAO implements Map<Integer, Robot> {
         }
     }
 
+    /**
+     * Implementação do Singleton
+     *
+     * @return instância única desta classe
+     */
     public static RobotDAO getInstance() {
         if (RobotDAO.singleton == null) {
             RobotDAO.singleton = new RobotDAO();
@@ -59,7 +64,12 @@ public class RobotDAO implements Map<Integer, Robot> {
         return false;
     }
 
-    @Override
+
+    /**
+     * Obtem-se um robot, dado o seu código
+     * @param key Código do robot
+     * @return Robot
+     */
     public Robot get(Object key) {
         Robot a = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -77,7 +87,13 @@ public class RobotDAO implements Map<Integer, Robot> {
         return a;
     }
 
-    @Override
+
+    /**
+     * Método que insere um robot na base de dados
+     * @param key Código do robot
+     * @param r Robot
+     * @return Robot
+     */
     public Robot put(Integer key, Robot r) {
         Robot res = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -113,7 +129,12 @@ public class RobotDAO implements Map<Integer, Robot> {
         return null;
     }
 
-    @Override
+
+
+    /**
+     * Devolve todas os robots da base de dados
+     * @return Collection<Robot>
+     */
     public Collection<Robot> values() {
         Collection<Robot> res = new HashSet<>();
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);

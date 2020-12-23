@@ -30,6 +30,11 @@ public class HistoricoDAO implements Map<Integer,Palete> {
         }
     }
 
+    /**
+     * Implementação do Singleton
+     *
+     * @return instância única desta classe
+     */
     public static HistoricoDAO getInstance() {
         if (HistoricoDAO.singleton == null) {
             HistoricoDAO.singleton = new HistoricoDAO();
@@ -37,8 +42,11 @@ public class HistoricoDAO implements Map<Integer,Palete> {
         return HistoricoDAO.singleton;
     }
 
-    //Necessitamos do size, put
 
+    /**
+     * Dá-nos o tamanho da amostra
+     * @return número de paletes referentes ao histórico na base de dados
+     */
     public int size() {
         int i = 0;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -56,6 +64,12 @@ public class HistoricoDAO implements Map<Integer,Palete> {
         return i;
     }
 
+    /**
+     * Método que insere uma palete referente ao histórico na base de dados
+     * @param key Código da palete
+     * @param a Palete
+     * @return Palete
+     */
     public Palete put(Integer key, Palete a) {
         Palete res = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -73,18 +87,27 @@ public class HistoricoDAO implements Map<Integer,Palete> {
     }
 
 
+
     public boolean isEmpty() {
         return false;
     }
+
 
     public boolean containsKey(Object key) {
         return false;
     }
 
+
     public boolean containsValue(Object value) {
         return false;
     }
 
+
+    /**
+     * Obtem-se uma palete referente ao histórico, dado o seu código
+     * @param key Código da palete
+     * @return Palete
+     */
     public Palete get(Object key) {
         Palete a = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -102,9 +125,11 @@ public class HistoricoDAO implements Map<Integer,Palete> {
         return a;
     }
 
+
     public Palete remove(Object key) {
         return null;
     }
+
 
     public void putAll(Map<? extends Integer, ? extends Palete> m) {
 
@@ -118,6 +143,11 @@ public class HistoricoDAO implements Map<Integer,Palete> {
         return null;
     }
 
+
+    /**
+     * Devolve todas as paletes referentes ao histórico da base de dados
+     * @return Todas as paletes
+     */
     public Collection<Palete> values() {
         Collection<Palete> res = new HashSet<>();
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -135,6 +165,7 @@ public class HistoricoDAO implements Map<Integer,Palete> {
         }
         return res;
     }
+
 
     public Set<Entry<Integer, Palete>> entrySet() {
         return null;

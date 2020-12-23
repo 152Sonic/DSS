@@ -27,7 +27,11 @@ public class PrateleirasDAO implements Map<Integer, Prateleira> {
             }
         }
 
-
+    /**
+     * Implementação do Singleton
+     *
+     * @return instância única desta classe
+     */
         public static PrateleirasDAO getInstance() {
             if (PrateleirasDAO.singleton == null) {
                 PrateleirasDAO.singleton = new PrateleirasDAO();
@@ -35,8 +39,12 @@ public class PrateleirasDAO implements Map<Integer, Prateleira> {
             return PrateleirasDAO.singleton;
         }
 
-        //Necessitamos do put, entrySet,
-
+    /**
+     * Método que insere uma prateleira na base de dados
+     * @param key Código da prateleira
+     * @param a Prateleira
+     * @return Prateleira
+     */
         public Prateleira put(Integer key, Prateleira a) {
             Prateleira res = null;
             try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -52,6 +60,10 @@ public class PrateleirasDAO implements Map<Integer, Prateleira> {
             return res;
         }
 
+    /**
+     * Método que devolve um conjunto de pares com prateleira e o respetivo código
+     * @return Conjunto com prateleira e o seu código
+     */
         public Set<Entry<Integer, Prateleira>> entrySet() {
             Set<Entry<Integer,Prateleira>> r = new HashSet<>();
             try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -68,22 +80,31 @@ public class PrateleirasDAO implements Map<Integer, Prateleira> {
             return r;
         }
 
+
         public int size() {
             return 0;
         }
+
 
         public boolean isEmpty() {
             return false;
         }
 
+
         public boolean containsKey(Object key) {
             return false;
         }
+
 
         public boolean containsValue(Object value) {
             return false;
         }
 
+    /**
+     * Obtem-se uma prateleira, dado o seu código
+     * @param key Código da prateleira
+     * @return Palete
+     */
         public Prateleira get(Object key) {
             Prateleira a = null;
             try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -101,18 +122,25 @@ public class PrateleirasDAO implements Map<Integer, Prateleira> {
             return a;
         }
 
+
         public Prateleira remove(Object key) {
             return null;
         }
+
 
         public void putAll(Map<? extends Integer, ? extends Prateleira> m) {
 
         }
 
+
         public void clear() {
 
         }
 
+    /**
+     * Devolve o conjunto dos códigos das prateleiras que estão na base de dados
+     * @return Conjunto dos códigos
+     */
         public Set<Integer> keySet() {
             return null;
         }

@@ -29,14 +29,24 @@ public class EsperaDAO implements List<Palete> {
         }
     }
 
+    /**
+     * Implementação do Singleton
+     *
+     * @return instância única desta classe
+     */
     public static EsperaDAO getInstance() {
         if (EsperaDAO.singleton == null) {
             EsperaDAO.singleton = new EsperaDAO();
         }
         return EsperaDAO.singleton;
     }
-    //Necessitamos do add, get, remove
 
+
+    /**
+     * Método que insere uma palete à lista de espera na base de dados
+     * @param a Palete
+     * @return boolean
+     */
     public boolean add(Palete a) {
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
              Statement stm = conn.createStatement()) {
@@ -51,6 +61,11 @@ public class EsperaDAO implements List<Palete> {
         return true;
     }
 
+    /**
+     * Método que remove uma palete da lista de espera, dado o seu código
+     * @param index Código de palete
+     * @return Palete
+     */
     public Palete remove(int index) {
         Palete p = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -64,6 +79,10 @@ public class EsperaDAO implements List<Palete> {
         return p;
     }
 
+    /**
+     * Obtem-se uma lista de paletes
+     * @return List<Palete>
+     */
     public static List<Palete> getToList(){
         List<Palete> r = new ArrayList<>();
         Palete p = null;
@@ -82,6 +101,11 @@ public class EsperaDAO implements List<Palete> {
         return r;
     }
 
+    /**
+     * Obtem-se uma palete da lista de espera, dado o seu código
+     * @param index Código da palete
+     * @return Palete
+     */
     public Palete get(int index) {
         Palete p = null;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -99,14 +123,20 @@ public class EsperaDAO implements List<Palete> {
         return p;
     }
 
+
     public boolean remove(Object o) {
         return false;
     }
+
 
     public void add(int index, Palete element) {
 
     }
 
+
+    /**
+     * Dá-nos o tamanho da amostra
+     */
     public int size() {
         int i = 0;
         try (Connection conn = DriverManager.getConnection(DAOconfig.URL, DAOconfig.USERNAME, DAOconfig.PASSWORD);
@@ -123,17 +153,23 @@ public class EsperaDAO implements List<Palete> {
         }
         return i;
     }
+
+
     public boolean isEmpty() {
         return false;
     }
+
+
 
     public boolean contains(Object o) {
         return false;
     }
 
+
     public Iterator<Palete> iterator() {
         return null;
     }
+
 
     public Object[] toArray() {
         return new Object[0];
