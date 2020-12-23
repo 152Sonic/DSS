@@ -59,9 +59,11 @@ public class TextUI {
      * Funcionamento das várias opções
      */
     public void run(){
+        int escolha;
         do{
             menu.executaP();
-            switch (menu.getOpcao()){
+            escolha = menu.getOpcao();
+            switch (escolha){
                 case 1:
                     runGestor();
                     break;
@@ -74,8 +76,10 @@ public class TextUI {
                 case 4:
                     runSistema();
                     break;
+                default:
+                    break;
             }
-        }while(menu.getOpcao()!=5);
+        }while(escolha!=5);
         System.out.println("Até breve!...");
     }
 

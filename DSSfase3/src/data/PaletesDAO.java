@@ -1,5 +1,4 @@
 package data;
-import business.Localizacao;
 import business.Palete;
 import java.sql.*;
 import java.util.*;
