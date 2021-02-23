@@ -328,7 +328,6 @@ public class SistemaFacade implements ISistemaFacade {
                 //this.p.setTransporte(r.getCodRobot());
                 p.setTransporte(r.getCodRobot());
                 r.setEntregue(1);
-                this.robot.put(r.getCodRobot(),r);
                 if (!isEntrada(p.getX(), p.getY())) {
                     for (Prateleira aux : this.prateleiras.values()) {
                         if ((aux.getCodPal() == p.getCodPalete())) {
@@ -343,6 +342,14 @@ public class SistemaFacade implements ISistemaFacade {
                             this.robot.put(r.getCodRobot(),r);
                         }
                     }
+                }
+                else{
+                    r.setxRobot(p.getX());
+                    r.setyRobot(p.getY());
+                    r.setLocalizacaoXFinal(this.espera.get(0).getX());
+                    r.setLocalizacaoYFinal(this.espera.get(0).getY());
+                    this.robot.put(r.getCodRobot(),r);
+                    this.espera.remove(0);
                 }
                 break;
             }
